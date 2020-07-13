@@ -1,0 +1,227 @@
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+
+// Variables
+@import 'variables';
+
+
+// Estilos globales
+@import 'globales';
+
+
+// Bootstrap
+//@import '~bootstrap/scss/bootstrap'; V-4
+@import '~bootstrap/dist/css/bootstrap.min.css'; // V-3.7
+
+
+// Fonts Fontawesome
+$fa-font-path: "../webfonts";
+
+// Fontawesome
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+@import "~@fortawesome/fontawesome-free/scss/regular.scss";
+
+
+// Select2
+@import "~select2/dist/css/select2.min.css";
+
+
+// Select2 Bootstrap Theme
+@import "~select2-bootstrap-theme/dist/select2-bootstrap.min.css";
+
+
+// Admin LTE
+@import '~admin-lte/dist/css/AdminLTE.css';
+@import '~admin-lte/dist/css/skins/_all-skins.css';
+
+
+// Datatables Bootstrap
+@import "~datatables.net-bs/css/dataTables.bootstrap.css";
+
+// DataTables Responsive Bootstrap
+@import "~datatables.net-responsive-bs/css/responsive.bootstrap.css";
+
+
+// DatePicker
+@import "~bootstrap-datepicker/dist/css/bootstrap-datepicker.css";
+
+
+// Highcharts
+//@import "~highcharts/css/highcharts.css";
+
+
+.logo-huem{
+  width: 40px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+
+.main-header .sidebar-toggle {
+  height: 50px !important;
+  font-family: "Font Awesome 5 Free" !important;
+}
+
+
+.head-menu-group{
+  border: 1px solid #293a4a;
+  background-color: rgba(41,58,74,.95);
+  color: #fff;
+  text-transform: uppercase;
+  padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.panel {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+.panel-widget {
+  border-radius: 3px;
+  box-shadow: 0 0 3px rgba(0,0,0,.2);
+  height: auto;
+  border: 0;
+  margin-bottom: 25px;
+  display: table;
+  width: 100%;
+  max-width: 100%;
+}
+
+.panel-heading {
+  padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.widget-heading {
+  border: 1px solid #293a4a;
+  background-color: rgba(41,58,74,.95);
+  color: #fbfbfb;
+  text-transform: uppercase;
+  cursor: move;
+}
+
+.panel-body {
+  padding: 15px;
+  overflow: hidden;
+}
+
+.item {
+  float: left;
+  height: 60px;
+  padding-right: 20px;
+  text-align: left;
+}
+
+.icon-file_manager {
+  background-size: 4656px 48px;
+  background-position: -1961px 0;
+  width: 48px;
+  height: 48px;
+}
+
+.img-item-panel {
+  width: 48px;
+  height: 48px;
+}
+
+.itemImageWrapper {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.itemTextWrapper {
+  padding: 10px 0 10px 5px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 200px;
+}
+
+
+
+/**** ESTILOS DEL MENU SUPERIOR ****/
+
+
+.menu-top>li{
+  border-left: 1px solid rgba(255,255,255,.05);
+}
+
+
+
+/**** ESTILOS SORTABLE ****/
+
+.sortable-placeholder
+{
+  border-radius: 3px;
+  box-shadow: 0 0 3px rgba(0,0,0,.2);
+  height: 132px;
+  border: 0;
+  margin-bottom: 25px;
+  display: table;
+  width: 100%;
+  max-width: 100%;
+
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+
+  background-color: #fbfbfb;
+}
+
+
+/**** ESTILOS SELECT2 ****/
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+  margin-top: 0px;
+}
+
+
+
+/**** ESTILOS FORMULARIOS ****/
+
+.form-control {
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+
+.btn_primary {
+  color: #fff;
+  background-color: #204d74 !important;
+  border-color: #122b40 !important;
+}
+
+
+
+/**** ESTILOS VENTANAS MODALS ****/
+
+.modal-footer {
+  border-top: none;
+}
+
+
+
+/**** ESTILOS DATEPICKER ****/
+
+.ui-datepicker-div { 
+  z-index: 1030;
+}
+
+
+
+/**** FONT AWESOME ****/
+
+.fa-125 {
+  font-size: 1.25em;
+}
+

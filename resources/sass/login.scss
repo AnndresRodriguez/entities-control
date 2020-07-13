@@ -1,0 +1,44 @@
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+//@import '~bootstrap/scss/bootstrap'; V4
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+
+// Swettalert2
+@import '~sweetalert2/dist/sweetalert2.min.css';
+
+
+// Fontawesome
+$fa-font-path: "../webfonts";
+
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+
+
+
+.fondo-login {
+  background-image: url('/images/login/fondo_login.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+.div-logo-scpns{
+  margin: 20px;
+  text-align: center;
+}
+
+
+.img-logo{
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+}
