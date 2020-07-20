@@ -7,6 +7,7 @@
 // SOFTWARE
 Route::get('/entes_control/informes', 'InformeController@index');
 Route::post('/entes_control/crear_informe', 'InformeController@crearInforme');
+Route::get('/entes_control/get_informes', 'InformeController@getInformes');
 
 
 Route::get('/entes_control/dependencias', 'DependenciaController@index');

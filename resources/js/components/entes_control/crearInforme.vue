@@ -49,12 +49,11 @@
                                             <div class="col-xs-12 col-sm-4 col-md-4">
                                                 <div class="form-group" :class="emptyNombre" >
                                                     <label> Nombre del Informe * </label>
-                                                    <span @click="initializeInputsCalendars">
+
                                                         <input type="text"
                                                         class="form-control"
                                                         required v-model="nombreInforme">
 
-                                                    </span>
                                                 </div>
                                             </div>
 
@@ -129,11 +128,12 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group" :class="emptyFechaEntrega" >
-                                                    <label> Seleccione la Fecha y Hora límite para la entrega del informe</label>
+                                                    <label> Seleccione la Fecha y Hora límite para la entrega del informe *</label>
                                                      <datetime
                                                         type="datetime" input-class="form-control"
-                                                        input-id="inputFechaEntrega"
                                                         use12-hour
+                                                        :min-datetime="dataInitialCalendar"
+                                                        :phrases="{ok: 'Seleccionar', cancel: 'Cancelar'}"
                                                         title="Fecha y hora de entrega"
                                                         v-model="dataEntrega">
                                                     </datetime>
@@ -144,33 +144,46 @@
                                                     <label> Periodo de repetición del Informe * </label>
                                                     <select class="form-control" id="selectfrecuencia" required @change="getPeriodoRepeticion(periodoSelect)" v-model="periodoSelect">
                                                         <option selected="selected" value="" disabled="disabled">SELECCIONE UNA OPCIÓN</option>
-                                                        <option value="1">DIARIAMENTE</option>
-                                                        <option value="2">MENSUAL</option>
-                                                        <option value="3">BIMESTRAL</option>
-                                                        <option value="5">TRIMESTRAL</option>
-                                                        <option value="6">CUATRIMESTRAL</option>
-                                                        <option value="7">SEMESTRAL</option>
-                                                        <option value="8">ANUAL</option>
+                                                        <option value="D">DIARIO</option>
+                                                        <option value="Q">QUINCENAL</option>
+                                                        <option value="M">MENSUAL</option>
+                                                        <option value="B">BIMESTRAL</option>
+                                                        <option value="T">TRIMESTRAL</option>
+                                                        <option value="C">CUATRIMESTRAL</option>
+                                                        <option value="S">SEMESTRAL</option>
+                                                        <option value="A">ANUAL</option>
                                                         <option value="4">PERSONALIZADO</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <!-- <div class="col-md-4">
 
-                                            </div>
+
+                                            </div> -->
+
                                             <div class="col-md-4">
+                                                <label> Finalizara despues de cuantas entregas</label>
+                                                <input type="number" class="form-control" id="cantidadFinalizacion" v-model="cantidadFinalizacion"
+                                                aria-describedby="cantidadFinalizacion" min="1" placeholder="Seleccione o digite la Cantidad">
+                                            </div>
+                                            <!-- <div class="col-md-2">
                                                 <div class="form-group" :class="emptyDataFinalizacion" >
                                                     <div class="form-group">
-                                                    <label> El informe se entregará hasta la fecha</label>
-                                                    <datetime
-                                                     input-id="data-finalizacion"
-                                                     input-class="form-control"
-                                                     v-model="dataFinalizacion">
-                                                    </datetime>
+                                                    <label> El informe dejará de entregarse en la fecha *</label>
+
+                                                        <datetime
+                                                        input-id="data-finalizacion"
+                                                        input-class="form-control"
+                                                        :disabled="enabledDateLimit"
+                                                        :min-datetime="initializeMinDateLimit"
+                                                        :phrases="{ok: 'Seleccionar', cancel: 'Cancelar'}"
+                                                        v-model="dataFinalizacion">
+                                                        </datetime>
+
                                                 </div>
                                                 </div>
 
-                                            </div>
+                                            </div> -->
 
                                         </div>
 
@@ -209,16 +222,18 @@
 									<div id="panel-alarma" class="panel-body collapse in">
 
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <div class="form-group" :class="emptyAlarma">
-                                                    <label> Seleccione la Fecha y Hora de Alarma</label>
+                                                    <label> Seleccione y agregue la Fecha y Hora de Alarma *</label>
                                                     <span @click="disabledBtnCreateAlarma">
                                                         <datetime
                                                         type="datetime" input-class="form-control"
                                                         use12-hour
                                                         v-model="dataAlarma"
                                                         title='Alarma de previo aviso'
-                                                        max-datetime="2020-07-13">
+                                                        :phrases="{ok: 'Seleccionar', cancel: 'Cancelar'}"
+                                                        :max-datetime="initializeMaxTimeAlarm"
+                                                        >
                                                         </datetime>
                                                     </span>
                                                 </div>
@@ -234,8 +249,6 @@
 
                                         <div class="row">
                                             <div class="col-md-12">
-
-
                                                 <template v-if="alarmas.length > 0">
                                                     <div class="d-flex flex-column">
                                                     <label>Alarmas creadas para avisarme previamente
@@ -250,10 +263,6 @@
                                                     </div>
                                                 </div>
                                                 </template>
-
-
-
-
                                             </div>
                                         </div>
 
@@ -279,9 +288,6 @@
 					<!-- DIV BOX CIERRE -->
                 </div>
             </div>
-
-
-
 
         <!-- Modal Crear Ente -->
         <div class="modal fade" id="modalNuevoEnte" tabindex="-1" role="dialog" aria-labelledby="modalNuevoEnteLabel" aria-hidden="true">
@@ -342,7 +348,7 @@ import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import { Datetime } from 'vue-datetime';
 import 'vue-datetime/dist/vue-datetime.css'
 import $ from 'jquery';
-import { formatDate, removeBlankSpaces, formatISO8601 } from './utilities'
+import { formatDate, removeBlankSpaces, formatISO8601, addDays, addMonths, addYear } from './utilities'
 
 export default {
 
@@ -361,14 +367,9 @@ export default {
 		data: function() {
 			return ({
                 file: '',
-                fechaEntrega: '', fechaLimite: '', dataEntrega: '', dataAlarma: '', dataEntrega: '', dataFinalizacion: '',
-                evidencias : [],
-                rawDataAlarmas: [],
-                alarmas: [],
-                horaLimite: '',
-                nombreInforme: '',
-                idDependencia: '', responsableDependencia: '', emailDependencia: '',
-                nuevoEnte: '',
+                fechaEntrega: '', fechaLimite: '', dataEntrega: '', dataAlarma: '', dataEntrega: '', dataFinalizacion: '', evidencias : [], rawDataAlarmas: [], alarmas: [], horaLimite: '',
+                nombreInforme: '', idDependencia: '', responsableDependencia: '', emailDependencia: '',
+                nuevoEnte: '', cantidadFinalizacion: 1,
                 entesControl: [],
                 dependencias: [],
                 personalizado: false,
@@ -381,7 +382,12 @@ export default {
                 dependenciaSelect: '',
                 alarmaSelect: '',
                 validatedata: false,
+                maxTimeAlarm: '',
+                minTimeDataLimit: '',
                 dataInitialCalendar:'',
+                periodoRepeticion: '',
+                periodo: 'D', agregarCantidad: 0,
+                entregas: [],
                 dropzoneOptions: {
                     url: 'https://httpbin.org/post',
                     thumbnailWidth: 200,
@@ -398,6 +404,38 @@ export default {
 			})
 		},
 		computed: {
+
+            enabledDateLimit: function(){
+
+                return this.dataEntrega == ''
+
+            },
+
+            initializeMinDateLimit(){
+
+                if(this.dataEntrega != ''){
+
+                    this.minTimeDataLimit = formatISO8601(new Date(this.dataEntrega));
+                    console.log(this.minTimeDataLimit);
+                    return this.minTimeDataLimit;
+
+                }
+
+            },
+
+            initializeMaxTimeAlarm(){
+
+                if(this.dataEntrega != ''){
+
+                    this.maxTimeAlarm = formatISO8601(new Date(this.dataEntrega));
+                    console.log(this.maxTimeAlarm)
+                    return this.maxTimeAlarm
+
+                }
+
+                return this.dataInitialCalendar;
+
+            },
 
             emptyNombre: function(){
                 if(this.validatedata){
@@ -475,18 +513,8 @@ export default {
 
             initizalizeCalendar(){
 
+                this.dataInitialCalendar = formatISO8601(new Date());
 
-                this.initizalizeCalendar = formatISO8601(new Date())
-                console.log(this.initizalizeCalendar)
-                // document.getElementById('fecha-entrega').valueAsDate = new Date().toDateInputValue();
-                // console.log(document.getElementById('fecha-entrega').valueAsDate)
-                // document.getElementById('fecha-finalizacion').valueAsDate = new Date().toDateInputValue();
-                // document.getElementById("hora-limite").defaultValue = "12:00";
-            },
-
-            initializeInputsCalendars: function(){
-
-                let inputFechaEntrega = document.getElementById("inputFechaEntrega")
             },
 
             getAllEntes: function(){
@@ -508,6 +536,31 @@ export default {
 
             getPeriodoRepeticion: function(periodoselected){
                 this.personalizado = periodoselected == 4
+
+                if (periodoselected != 'D' || periodoselected != 'Q'){
+                    if (periodoselected != 'A'){
+                        this.periodo = 'M'
+                    } else {
+                        this.periodo = 'A'
+                    }
+                }
+
+                if(periodoselected == 'D' || periodoselected == 'M' || periodoselected == 'A'){
+                    this.agregarCantidad = 1
+                } else if(periodoselected == 'Q'){
+                    this.agregarCantidad = 15
+                } else if(periodoselected == 'B'){
+                    this.agregarCantidad = 2
+                } else if(periodoselected == 'T'){
+                    this.agregarCantidad = 3
+                } else if(periodoselected == 'C'){
+                    this.agregarCantidad = 4
+                } else if(periodoselected == 'S'){
+                    this.agregarCantidad = 6
+                }
+
+
+
             },
 
             getPeriodoAlarma: function(selected){
@@ -599,82 +652,86 @@ export default {
 
             crearInforme(){
 
-                this.validatedata = true
-                if(removeBlankSpaces(this.nombreInforme) == ''){
-
-                    this.getToast('info', 'Debe asignar un nombre al informe', 'fa-times')
-                    // document.getElementById('divnombre').classList.add('has-error')
-
-                } else if(this.idEnteSelect == ''){
-
-                    this.getToast('info', 'Debe seleccionar el ente al que se realiza el informe', 'fa-times')
-
-                } else if(this.file == ''){
-
-                    this.getToast('info', 'Debe seleccionar el archivo correspondiente a la normativa del informe', 'fa-times')
-
-                } else if(this.idDependencia == ''){
-
-                    this.getToast('info', 'Debe seleccionar la dependencia responsable', 'fa-times')
 
 
-                } else if(this.dataEntrega == ''){
+                // this.crearFechasEntregas();
 
-                    this.getToast('info', 'Debe seleccionar la fecha de entrega del informe', 'fa-times')
-                }
-                  else if(this.periodoSelect == ''){
+                // this.validatedata = true
+                // if(removeBlankSpaces(this.nombreInforme) == ''){
 
-                    this.getToast('info', 'Debe seleccionar el periodo de repetición de informe', 'fa-times')
-                }
+                //     this.getToast('info', 'Debe asignar un nombre al informe', 'fa-times')
+                //     // document.getElementById('divnombre').classList.add('has-error')
 
-                  else if(this.dataFinalizacion == ''){
+                // } else if(this.idEnteSelect == ''){
 
-                    this.getToast('info', 'Debe seleccionar hasta que fecha se entregará este informe', 'fa-times')
+                //     this.getToast('info', 'Debe seleccionar el ente al que se realiza el informe', 'fa-times')
 
-                } else if(this.dataAlarma == ''){
+                // } else if(this.file == ''){
 
+                //     this.getToast('info', 'Debe seleccionar el archivo correspondiente a la normativa del informe', 'fa-times')
 
-                    this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
+                // } else if(this.idDependencia == ''){
 
-                } else if(this.rawDataAlarmas.length < 1) {
-
-                    this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
-
-                } else {
-
-                    let formData = new FormData();
-                    formData.append('nombre', this.nombreInforme);
-                    formData.append('id_ente_control', this.idEnteSelect);
-                    formData.append('id_dependencia', this.idDependencia);
-                    formData.append('normativa', this.file);
-                    formData.append('fecha_entrega', new Date(this.dataEntrega));
-                    formData.append('fecha_final_entregas', new Date(this.dataFinalizacion));
-                    // formData.append('alarmas', JSON.stringify(this.rawDataAlarmas))
-                    this.rawDataAlarmas.map( alarma => {
-                        formData.append('alarmas[]', new Date(alarma));
-                    });
-
-                    axios.post('http://localhost:3000/entes_control/crear_informe',
-                    formData,
-                    { headers: {'Content-Type':'multipart/form-data'} })
-                    .then( res => {
-                        if(!res.data.error){
-                            // this.getToast('success', `${res.data.message}`, 'fa-check')
-                            Swal({ title: 'Informe creado exitosamente', type: 'success', showConfirmButton: false, timer: 3000 });
+                //     this.getToast('info', 'Debe seleccionar la dependencia responsable', 'fa-times')
 
 
+                // } else if(this.dataEntrega == ''){
+                //     this.getToast('info', 'Debe seleccionar la fecha de entrega del informe', 'fa-times')
+                // }
+                //   else if(this.periodoSelect == ''){
+                //     this.getToast('info', 'Debe seleccionar el periodo de repetición de informe', 'fa-times')
+                // }
 
-                        }else {
+                //   else if(this.dataFinalizacion == ''){
 
-                            Swal({ title: 'Informe creado exitosamente', type: 'error', showConfirmButton: false, timer: 3000 });
+                //     this.getToast('info', 'Debe seleccionar hasta que fecha se entregará este informe', 'fa-times')
 
-                            // console.log(res.data.errorMessage)
-                            // this.getToast('error', `${res.data.message}`, 'fa-times')
-                        }
+                // } else if(this.dataAlarma == ''){
 
-                    })
 
-                }
+                //     this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
+
+                // } else if(this.rawDataAlarmas.length < 1) {
+
+                //     this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
+
+                // } else {
+
+                //     let formData = new FormData();
+                //     formData.append('nombre', this.nombreInforme);
+                //     formData.append('id_ente_control', this.idEnteSelect);
+                //     formData.append('id_dependencia', this.idDependencia);
+                //     formData.append('normativa', this.file);
+                //     formData.append('fecha_entrega', new Date(this.dataEntrega));
+                //     formData.append('fecha_final_entregas', new Date(this.dataFinalizacion));
+                //     // formData.append('alarmas', JSON.stringify(this.rawDataAlarmas))
+                //     this.rawDataAlarmas.map( alarma => {
+                //         formData.append('alarmas[]', new Date(alarma));
+                //     });
+
+                //     axios.post('http://localhost:3000/entes_control/crear_informe',
+                //     formData,
+                //     { headers: {'Content-Type':'multipart/form-data'} })
+                //     .then( res => {
+                //         if(!res.data.error){
+                //             // this.getToast('success', `${res.data.message}`, 'fa-check')
+                //             Swal({ title: 'Informe creado exitosamente', type: 'success', showConfirmButton: false, timer: 3000 });
+
+
+
+                //         }else {
+
+                //             Swal({ title: 'Informe creado exitosamente', type: 'error', showConfirmButton: false, timer: 3000 });
+
+                //             // console.log(res.data.errorMessage)
+                //             // this.getToast('error', `${res.data.message}`, 'fa-times')
+                //         }
+
+                //     })
+
+                // }
+
+
 
 
 
@@ -730,7 +787,77 @@ export default {
                 this.rawDataAlarmas = [];
                 this.validatedata = false;
 
+            },
+
+            crearFechasEntregas: function(){
+
+                console.log(this.dataEntrega)
+                console.log(this.agregarCantidad)
+                console.log(this.periodoSelect)
+
+                if(this.periodoSelect == 'Q' || this.periodoSelect == 'D'){
+
+                    let tempCurrentFecha = ''
+                    for (let index = 0; index < this.cantidadFinalizacion; index++) {
+                        if(tempCurrentFecha == ''){
+                            tempCurrentFecha = addDays(new Date(this.dataEntrega), this.agregarCantidad);
+                            this.entregas.push(tempCurrentFecha)
+                        }
+                        else {
+                            tempCurrentFecha = addDays(new Date(tempCurrentFecha), this.agregarCantidad)
+                            this.entregas.push(tempCurrentFecha);
+                        }
+                    }
+
+                    console.log('diariamente', this.entregas)
+
+
+                } else if (this.periodoSelect == 'A') {
+
+                    let tempCurrentFecha = ''
+                    for (let index = 0; index < this.cantidadFinalizacion; index++) {
+                        if(tempCurrentFecha == ''){
+                            tempCurrentFecha = addYear(new Date(this.dataEntrega), this.agregarCantidad);
+                            this.entregas.push(tempCurrentFecha)
+                        }
+                        else {
+                            tempCurrentFecha = addYear(new Date(tempCurrentFecha), this.agregarCantidad)
+                            this.entregas.push(tempCurrentFecha);
+                        }
+                    }
+                    console.log('anuales', this.entregas)
+                } else {
+
+                    let tempCurrentFecha = ''
+                    for (let index = 0; index < this.cantidadFinalizacion; index++) {
+                        if(tempCurrentFecha == ''){
+                            tempCurrentFecha = addMonths(new Date(this.dataEntrega), this.agregarCantidad);
+                            this.entregas.push(tempCurrentFecha)
+                        }
+                        else {
+                            tempCurrentFecha = addMonths(new Date(tempCurrentFecha), this.agregarCantidad)
+                            this.entregas.push(tempCurrentFecha);
+                        }
+                    }
+                    console.log('mensuales',this.entregas)
+
+                }
+
+
+                // periodo: 'D', agregarCantidad: 0,
+                // cantidadFinalizacion
+
+                // for (let index = 0; index < array.length; index++) {
+                //     const element = array[index];
+
+                // }
+
             }
+
+
+
+
+
 
 
 		}

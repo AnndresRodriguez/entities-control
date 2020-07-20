@@ -42,17 +42,43 @@ export function removeBlankSpaces(data){
 
 export function addDays(date, days) {
 
-    let result = new Date(date);
-    result.setDate(date.getDate() + days);
+    console.log('receivedday', date )
+
+    let result = new Date(date.setDate(date.getDate() + days));
+    console.log('days', days )
+
+    console.log('convertedday', result )
+    // result.setDate(date.getDate() + days);
+    return result;
+}
+
+export function addMonths(date, months) {
+
+    // let result = new Date(date);
+    let result = new Date(date.setMonth(date.getMonth() + months));
+    // result.setDate(date.getMonth() + months);
+    console.log('months', months )
+    console.log('received', date )
+    console.log('converted', result )
+    return result;
+}
+
+export function addYear(date, years) {
+
+    // let result = new Date(date);
+    let result = new Date(date.setFullYear(date.getFullYear() + years));
+    // result.setDate(date.getFullYear() + years);
     return result;
 }
 
 export function discountDays(date, days) {
     let result = new Date(date);
-    console.log(result)
+    // console.log(result)
     result.setDate(date.getDate() - days);
-    return formatDate(result);
+    return result;
 }
+
+
 
 export function formatHour(hour){
     let timeString = hour;

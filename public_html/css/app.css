@@ -29042,38 +29042,27 @@ var render = function() {
                                     _vm._v(" Nombre del Informe * ")
                                   ]),
                                   _vm._v(" "),
-                                  _c(
-                                    "span",
-                                    {
-                                      on: {
-                                        click: _vm.initializeInputsCalendars
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.nombreInforme,
+                                        expression: "nombreInforme"
                                       }
-                                    },
-                                    [
-                                      _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.nombreInforme,
-                                            expression: "nombreInforme"
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        attrs: { type: "text", required: "" },
-                                        domProps: { value: _vm.nombreInforme },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.nombreInforme =
-                                              $event.target.value
-                                          }
+                                    ],
+                                    staticClass: "form-control",
+                                    attrs: { type: "text", required: "" },
+                                    domProps: { value: _vm.nombreInforme },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
                                         }
-                                      })
-                                    ]
-                                  )
+                                        _vm.nombreInforme = $event.target.value
+                                      }
+                                    }
+                                  })
                                 ]
                               )
                             ]
@@ -29413,7 +29402,7 @@ var render = function() {
                               [
                                 _c("label", [
                                   _vm._v(
-                                    " Seleccione la Fecha y Hora límite para la entrega del informe"
+                                    " Seleccione la Fecha y Hora límite para la entrega del informe *"
                                   )
                                 ]),
                                 _vm._v(" "),
@@ -29421,8 +29410,12 @@ var render = function() {
                                   attrs: {
                                     type: "datetime",
                                     "input-class": "form-control",
-                                    "input-id": "inputFechaEntrega",
                                     "use12-hour": "",
+                                    "min-datetime": _vm.dataInitialCalendar,
+                                    phrases: {
+                                      ok: "Seleccionar",
+                                      cancel: "Cancelar"
+                                    },
                                     title: "Fecha y hora de entrega"
                                   },
                                   model: {
@@ -29511,31 +29504,35 @@ var render = function() {
                                       [_vm._v("SELECCIONE UNA OPCIÓN")]
                                     ),
                                     _vm._v(" "),
-                                    _c("option", { attrs: { value: "1" } }, [
-                                      _vm._v("DIARIAMENTE")
+                                    _c("option", { attrs: { value: "D" } }, [
+                                      _vm._v("DIARIO")
                                     ]),
                                     _vm._v(" "),
-                                    _c("option", { attrs: { value: "2" } }, [
+                                    _c("option", { attrs: { value: "Q" } }, [
+                                      _vm._v("QUINCENAL")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "M" } }, [
                                       _vm._v("MENSUAL")
                                     ]),
                                     _vm._v(" "),
-                                    _c("option", { attrs: { value: "3" } }, [
+                                    _c("option", { attrs: { value: "B" } }, [
                                       _vm._v("BIMESTRAL")
                                     ]),
                                     _vm._v(" "),
-                                    _c("option", { attrs: { value: "5" } }, [
+                                    _c("option", { attrs: { value: "T" } }, [
                                       _vm._v("TRIMESTRAL")
                                     ]),
                                     _vm._v(" "),
-                                    _c("option", { attrs: { value: "6" } }, [
+                                    _c("option", { attrs: { value: "C" } }, [
                                       _vm._v("CUATRIMESTRAL")
                                     ]),
                                     _vm._v(" "),
-                                    _c("option", { attrs: { value: "7" } }, [
+                                    _c("option", { attrs: { value: "S" } }, [
                                       _vm._v("SEMESTRAL")
                                     ]),
                                     _vm._v(" "),
-                                    _c("option", { attrs: { value: "8" } }, [
+                                    _c("option", { attrs: { value: "A" } }, [
                                       _vm._v("ANUAL")
                                     ]),
                                     _vm._v(" "),
@@ -29548,44 +29545,38 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _c("div", { staticClass: "col-md-4" }),
-                          _vm._v(" "),
                           _c("div", { staticClass: "col-md-4" }, [
-                            _c(
-                              "div",
-                              {
-                                staticClass: "form-group",
-                                class: _vm.emptyDataFinalizacion
+                            _c("label", [
+                              _vm._v(" Finalizara despues de cuantas entregas")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.cantidadFinalizacion,
+                                  expression: "cantidadFinalizacion"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "number",
+                                id: "cantidadFinalizacion",
+                                "aria-describedby": "cantidadFinalizacion",
+                                min: "1",
+                                placeholder: "Seleccione o digite la Cantidad"
                               },
-                              [
-                                _c(
-                                  "div",
-                                  { staticClass: "form-group" },
-                                  [
-                                    _c("label", [
-                                      _vm._v(
-                                        " El informe se entregará hasta la fecha"
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("datetime", {
-                                      attrs: {
-                                        "input-id": "data-finalizacion",
-                                        "input-class": "form-control"
-                                      },
-                                      model: {
-                                        value: _vm.dataFinalizacion,
-                                        callback: function($$v) {
-                                          _vm.dataFinalizacion = $$v
-                                        },
-                                        expression: "dataFinalizacion"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
-                              ]
-                            )
+                              domProps: { value: _vm.cantidadFinalizacion },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.cantidadFinalizacion = $event.target.value
+                                }
+                              }
+                            })
                           ])
                         ]),
                         _vm._v(" "),
@@ -29738,7 +29729,7 @@ var render = function() {
                       },
                       [
                         _c("div", { staticClass: "row" }, [
-                          _c("div", { staticClass: "col-md-3" }, [
+                          _c("div", { staticClass: "col-md-4" }, [
                             _c(
                               "div",
                               {
@@ -29748,7 +29739,7 @@ var render = function() {
                               [
                                 _c("label", [
                                   _vm._v(
-                                    " Seleccione la Fecha y Hora de Alarma"
+                                    " Seleccione y agregue la Fecha y Hora de Alarma *"
                                   )
                                 ]),
                                 _vm._v(" "),
@@ -29764,7 +29755,12 @@ var render = function() {
                                         "input-class": "form-control",
                                         "use12-hour": "",
                                         title: "Alarma de previo aviso",
-                                        "max-datetime": "2020-07-13"
+                                        phrases: {
+                                          ok: "Seleccionar",
+                                          cancel: "Cancelar"
+                                        },
+                                        "max-datetime":
+                                          _vm.initializeMaxTimeAlarm
                                       },
                                       model: {
                                         value: _vm.dataAlarma,
@@ -30555,6 +30551,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -30580,7 +30582,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       fechaLimite: '',
       dataEntrega: '',
       dataAlarma: ''
-    }, _defineProperty(_ref, "dataEntrega", ''), _defineProperty(_ref, "dataFinalizacion", ''), _defineProperty(_ref, "evidencias", []), _defineProperty(_ref, "rawDataAlarmas", []), _defineProperty(_ref, "alarmas", []), _defineProperty(_ref, "horaLimite", ''), _defineProperty(_ref, "nombreInforme", ''), _defineProperty(_ref, "idDependencia", ''), _defineProperty(_ref, "responsableDependencia", ''), _defineProperty(_ref, "emailDependencia", ''), _defineProperty(_ref, "nuevoEnte", ''), _defineProperty(_ref, "entesControl", []), _defineProperty(_ref, "dependencias", []), _defineProperty(_ref, "personalizado", false), _defineProperty(_ref, "esSemanal", true), _defineProperty(_ref, "cantidad", 1), _defineProperty(_ref, "repeticion", 1), _defineProperty(_ref, "tipopersonalizado", ''), _defineProperty(_ref, "enteSelect", {}), _defineProperty(_ref, "nombreEnteSelect", ''), _defineProperty(_ref, "idEnteSelect", ''), _defineProperty(_ref, "periodoSelect", ''), _defineProperty(_ref, "dependenciaSelect", ''), _defineProperty(_ref, "alarmaSelect", ''), _defineProperty(_ref, "validatedata", false), _defineProperty(_ref, "dataInitialCalendar", ''), _defineProperty(_ref, "dropzoneOptions", {
+    }, _defineProperty(_ref, "dataEntrega", ''), _defineProperty(_ref, "dataFinalizacion", ''), _defineProperty(_ref, "evidencias", []), _defineProperty(_ref, "rawDataAlarmas", []), _defineProperty(_ref, "alarmas", []), _defineProperty(_ref, "horaLimite", ''), _defineProperty(_ref, "nombreInforme", ''), _defineProperty(_ref, "idDependencia", ''), _defineProperty(_ref, "responsableDependencia", ''), _defineProperty(_ref, "emailDependencia", ''), _defineProperty(_ref, "nuevoEnte", ''), _defineProperty(_ref, "cantidadFinalizacion", 1), _defineProperty(_ref, "entesControl", []), _defineProperty(_ref, "dependencias", []), _defineProperty(_ref, "personalizado", false), _defineProperty(_ref, "esSemanal", true), _defineProperty(_ref, "cantidad", 1), _defineProperty(_ref, "repeticion", 1), _defineProperty(_ref, "tipopersonalizado", ''), _defineProperty(_ref, "enteSelect", {}), _defineProperty(_ref, "nombreEnteSelect", ''), _defineProperty(_ref, "idEnteSelect", ''), _defineProperty(_ref, "periodoSelect", ''), _defineProperty(_ref, "dependenciaSelect", ''), _defineProperty(_ref, "alarmaSelect", ''), _defineProperty(_ref, "validatedata", false), _defineProperty(_ref, "maxTimeAlarm", ''), _defineProperty(_ref, "minTimeDataLimit", ''), _defineProperty(_ref, "dataInitialCalendar", ''), _defineProperty(_ref, "periodoRepeticion", ''), _defineProperty(_ref, "periodo", 'D'), _defineProperty(_ref, "agregarCantidad", 0), _defineProperty(_ref, "entregas", []), _defineProperty(_ref, "dropzoneOptions", {
       url: 'https://httpbin.org/post',
       thumbnailWidth: 200,
       thumbnailHeight: 200,
@@ -30593,6 +30595,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }), _ref;
   },
   computed: {
+    enabledDateLimit: function enabledDateLimit() {
+      return this.dataEntrega == '';
+    },
+    initializeMinDateLimit: function initializeMinDateLimit() {
+      if (this.dataEntrega != '') {
+        this.minTimeDataLimit = Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["formatISO8601"])(new Date(this.dataEntrega));
+        console.log(this.minTimeDataLimit);
+        return this.minTimeDataLimit;
+      }
+    },
+    initializeMaxTimeAlarm: function initializeMaxTimeAlarm() {
+      if (this.dataEntrega != '') {
+        this.maxTimeAlarm = Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["formatISO8601"])(new Date(this.dataEntrega));
+        console.log(this.maxTimeAlarm);
+        return this.maxTimeAlarm;
+      }
+
+      return this.dataInitialCalendar;
+    },
     emptyNombre: function emptyNombre() {
       if (this.validatedata) {
         return Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["removeBlankSpaces"])(this.nombreInforme) == '' ? ' has-error' : '';
@@ -30667,14 +30688,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       document.getElementById('data-finalizacion').disabled = false;
     },
     initizalizeCalendar: function initizalizeCalendar() {
-      this.initizalizeCalendar = Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["formatISO8601"])(new Date());
-      console.log(this.initizalizeCalendar); // document.getElementById('fecha-entrega').valueAsDate = new Date().toDateInputValue();
-      // console.log(document.getElementById('fecha-entrega').valueAsDate)
-      // document.getElementById('fecha-finalizacion').valueAsDate = new Date().toDateInputValue();
-      // document.getElementById("hora-limite").defaultValue = "12:00";
-    },
-    initializeInputsCalendars: function initializeInputsCalendars() {
-      var inputFechaEntrega = document.getElementById("inputFechaEntrega");
+      this.dataInitialCalendar = Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["formatISO8601"])(new Date());
     },
     getAllEntes: function getAllEntes() {
       var _this = this;
@@ -30692,6 +30706,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     getPeriodoRepeticion: function getPeriodoRepeticion(periodoselected) {
       this.personalizado = periodoselected == 4;
+
+      if (periodoselected != 'D' || periodoselected != 'Q') {
+        if (periodoselected != 'A') {
+          this.periodo = 'M';
+        } else {
+          this.periodo = 'A';
+        }
+      }
+
+      if (periodoselected == 'D' || periodoselected == 'M' || periodoselected == 'A') {
+        this.agregarCantidad = 1;
+      } else if (periodoselected == 'Q') {
+        this.agregarCantidad = 15;
+      } else if (periodoselected == 'B') {
+        this.agregarCantidad = 2;
+      } else if (periodoselected == 'T') {
+        this.agregarCantidad = 3;
+      } else if (periodoselected == 'C') {
+        this.agregarCantidad = 4;
+      } else if (periodoselected == 'S') {
+        this.agregarCantidad = 6;
+      }
     },
     getPeriodoAlarma: function getPeriodoAlarma(selected) {},
     getPersonalizado: function getPersonalizado(textpersonalizado) {
@@ -30778,63 +30814,56 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.rawDataAlarmas.push(new Date(this.dataAlarma));
       console.log(this.rawDataAlarmas);
     },
-    crearInforme: function crearInforme() {
-      this.validatedata = true;
-
-      if (Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["removeBlankSpaces"])(this.nombreInforme) == '') {
-        this.getToast('info', 'Debe asignar un nombre al informe', 'fa-times'); // document.getElementById('divnombre').classList.add('has-error')
-      } else if (this.idEnteSelect == '') {
-        this.getToast('info', 'Debe seleccionar el ente al que se realiza el informe', 'fa-times');
-      } else if (this.file == '') {
-        this.getToast('info', 'Debe seleccionar el archivo correspondiente a la normativa del informe', 'fa-times');
-      } else if (this.idDependencia == '') {
-        this.getToast('info', 'Debe seleccionar la dependencia responsable', 'fa-times');
-      } else if (this.dataEntrega == '') {
-        this.getToast('info', 'Debe seleccionar la fecha de entrega del informe', 'fa-times');
-      } else if (this.periodoSelect == '') {
-        this.getToast('info', 'Debe seleccionar el periodo de repetición de informe', 'fa-times');
-      } else if (this.dataFinalizacion == '') {
-        this.getToast('info', 'Debe seleccionar hasta que fecha se entregará este informe', 'fa-times');
-      } else if (this.dataAlarma == '') {
-        this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times');
-      } else if (this.rawDataAlarmas.length < 1) {
-        this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times');
-      } else {
-        var formData = new FormData();
-        formData.append('nombre', this.nombreInforme);
-        formData.append('id_ente_control', this.idEnteSelect);
-        formData.append('id_dependencia', this.idDependencia);
-        formData.append('normativa', this.file);
-        formData.append('fecha_entrega', new Date(this.dataEntrega));
-        formData.append('fecha_final_entregas', new Date(this.dataFinalizacion)); // formData.append('alarmas', JSON.stringify(this.rawDataAlarmas))
-
-        this.rawDataAlarmas.map(function (alarma) {
-          formData.append('alarmas[]', new Date(alarma));
-        });
-        axios.post('http://localhost:3000/entes_control/crear_informe', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then(function (res) {
-          if (!res.data.error) {
-            // this.getToast('success', `${res.data.message}`, 'fa-check')
-            Swal({
-              title: 'Informe creado exitosamente',
-              type: 'success',
-              showConfirmButton: false,
-              timer: 3000
-            });
-          } else {
-            Swal({
-              title: 'Informe creado exitosamente',
-              type: 'error',
-              showConfirmButton: false,
-              timer: 3000
-            }); // console.log(res.data.errorMessage)
-            // this.getToast('error', `${res.data.message}`, 'fa-times')
-          }
-        });
-      } // console.log(this.alarmaSelect);
+    crearInforme: function crearInforme() {// this.crearFechasEntregas();
+      // this.validatedata = true
+      // if(removeBlankSpaces(this.nombreInforme) == ''){
+      //     this.getToast('info', 'Debe asignar un nombre al informe', 'fa-times')
+      //     // document.getElementById('divnombre').classList.add('has-error')
+      // } else if(this.idEnteSelect == ''){
+      //     this.getToast('info', 'Debe seleccionar el ente al que se realiza el informe', 'fa-times')
+      // } else if(this.file == ''){
+      //     this.getToast('info', 'Debe seleccionar el archivo correspondiente a la normativa del informe', 'fa-times')
+      // } else if(this.idDependencia == ''){
+      //     this.getToast('info', 'Debe seleccionar la dependencia responsable', 'fa-times')
+      // } else if(this.dataEntrega == ''){
+      //     this.getToast('info', 'Debe seleccionar la fecha de entrega del informe', 'fa-times')
+      // }
+      //   else if(this.periodoSelect == ''){
+      //     this.getToast('info', 'Debe seleccionar el periodo de repetición de informe', 'fa-times')
+      // }
+      //   else if(this.dataFinalizacion == ''){
+      //     this.getToast('info', 'Debe seleccionar hasta que fecha se entregará este informe', 'fa-times')
+      // } else if(this.dataAlarma == ''){
+      //     this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
+      // } else if(this.rawDataAlarmas.length < 1) {
+      //     this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
+      // } else {
+      //     let formData = new FormData();
+      //     formData.append('nombre', this.nombreInforme);
+      //     formData.append('id_ente_control', this.idEnteSelect);
+      //     formData.append('id_dependencia', this.idDependencia);
+      //     formData.append('normativa', this.file);
+      //     formData.append('fecha_entrega', new Date(this.dataEntrega));
+      //     formData.append('fecha_final_entregas', new Date(this.dataFinalizacion));
+      //     // formData.append('alarmas', JSON.stringify(this.rawDataAlarmas))
+      //     this.rawDataAlarmas.map( alarma => {
+      //         formData.append('alarmas[]', new Date(alarma));
+      //     });
+      //     axios.post('http://localhost:3000/entes_control/crear_informe',
+      //     formData,
+      //     { headers: {'Content-Type':'multipart/form-data'} })
+      //     .then( res => {
+      //         if(!res.data.error){
+      //             // this.getToast('success', `${res.data.message}`, 'fa-check')
+      //             Swal({ title: 'Informe creado exitosamente', type: 'success', showConfirmButton: false, timer: 3000 });
+      //         }else {
+      //             Swal({ title: 'Informe creado exitosamente', type: 'error', showConfirmButton: false, timer: 3000 });
+      //             // console.log(res.data.errorMessage)
+      //             // this.getToast('error', `${res.data.message}`, 'fa-times')
+      //         }
+      //     })
+      // }
+      // console.log(this.alarmaSelect);
       // let formData = new FormData();
       // formData.append('normativa', this.file);
       // console.log(this.file)
@@ -30849,7 +30878,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       // .catch(err => {
       //     console.log(err)
       // });
-
     },
     loadMulipleFiles: function loadMulipleFiles(files, response) {
       this.evidencias = files;
@@ -30876,12 +30904,68 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.dataAlarma = '';
       this.rawDataAlarmas = [];
       this.validatedata = false;
+    },
+    crearFechasEntregas: function crearFechasEntregas() {
+      console.log(this.dataEntrega);
+      console.log(this.agregarCantidad);
+      console.log(this.periodoSelect);
+
+      if (this.periodoSelect == 'Q' || this.periodoSelect == 'D') {
+        var tempCurrentFecha = '';
+
+        for (var index = 0; index < this.cantidadFinalizacion; index++) {
+          if (tempCurrentFecha == '') {
+            tempCurrentFecha = Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["addDays"])(new Date(this.dataEntrega), this.agregarCantidad);
+            this.entregas.push(tempCurrentFecha);
+          } else {
+            tempCurrentFecha = Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["addDays"])(new Date(tempCurrentFecha), this.agregarCantidad);
+            this.entregas.push(tempCurrentFecha);
+          }
+        }
+
+        console.log('diariamente', this.entregas);
+      } else if (this.periodoSelect == 'A') {
+        var _tempCurrentFecha = '';
+
+        for (var _index = 0; _index < this.cantidadFinalizacion; _index++) {
+          if (_tempCurrentFecha == '') {
+            _tempCurrentFecha = Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["addYear"])(new Date(this.dataEntrega), this.agregarCantidad);
+            this.entregas.push(_tempCurrentFecha);
+          } else {
+            _tempCurrentFecha = Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["addYear"])(new Date(_tempCurrentFecha), this.agregarCantidad);
+            this.entregas.push(_tempCurrentFecha);
+          }
+        }
+
+        console.log('anuales', this.entregas);
+      } else {
+        var _tempCurrentFecha2 = '';
+
+        for (var _index2 = 0; _index2 < this.cantidadFinalizacion; _index2++) {
+          if (_tempCurrentFecha2 == '') {
+            _tempCurrentFecha2 = Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["addMonths"])(new Date(this.dataEntrega), this.agregarCantidad);
+            this.entregas.push(_tempCurrentFecha2);
+          } else {
+            _tempCurrentFecha2 = Object(_utilities__WEBPACK_IMPORTED_MODULE_5__["addMonths"])(new Date(_tempCurrentFecha2), this.agregarCantidad);
+            this.entregas.push(_tempCurrentFecha2);
+          }
+        }
+
+        console.log('mensuales', this.entregas);
+      } // periodo: 'D', agregarCantidad: 0,
+      // cantidadFinalizacion
+      // for (let index = 0; index < array.length; index++) {
+      //     const element = array[index];
+      // }
+
     }
   }
 });__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validateEmail", function() { return validateEmail; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeBlankSpaces", function() { return removeBlankSpaces; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addDays", function() { return addDays; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addMonths", function() { return addMonths; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addYear", function() { return addYear; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "discountDays", function() { return discountDays; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatHour", function() { return formatHour; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatDate", function() { return formatDate; });
@@ -30919,15 +31003,33 @@ function removeBlankSpaces(data) {
   return data.replace(/\s/g, '');
 }
 function addDays(date, days) {
-  var result = new Date(date);
-  result.setDate(date.getDate() + days);
+  console.log('receivedday', date);
+  var result = new Date(date.setDate(date.getDate() + days));
+  console.log('days', days);
+  console.log('convertedday', result); // result.setDate(date.getDate() + days);
+
+  return result;
+}
+function addMonths(date, months) {
+  // let result = new Date(date);
+  var result = new Date(date.setMonth(date.getMonth() + months)); // result.setDate(date.getMonth() + months);
+
+  console.log('months', months);
+  console.log('received', date);
+  console.log('converted', result);
+  return result;
+}
+function addYear(date, years) {
+  // let result = new Date(date);
+  var result = new Date(date.setFullYear(date.getFullYear() + years)); // result.setDate(date.getFullYear() + years);
+
   return result;
 }
 function discountDays(date, days) {
-  var result = new Date(date);
-  console.log(result);
+  var result = new Date(date); // console.log(result)
+
   result.setDate(date.getDate() - days);
-  return formatDate(result);
+  return result;
 }
 function formatHour(hour) {
   var timeString = hour;
@@ -32595,11 +32697,8 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    var _this = this;
-
-    axios.get('http://localhost:3000/entes_control/dependencias').then(function (res) {
-      _this.dependencias = res.data.dependencias;
-    });
+    this.getAllDependencies();
+    this.getAllInformes();
   },
   data: function data() {
     return {
@@ -32611,6 +32710,18 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getDependenciaSelected: function getDependenciaSelected(dependenciaSelected) {
       console.log(dependenciaSelected);
+    },
+    getAllDependencies: function getAllDependencies() {
+      var _this = this;
+
+      axios.get('http://localhost:3000/entes_control/dependencias').then(function (res) {
+        _this.dependencias = res.data.dependencias;
+      });
+    },
+    getAllInformes: function getAllInformes() {
+      axios.get('http://localhost:3000/entes_control/get_informes').then(function (res) {
+        console.log(res.data);
+      });
     }
   }
 });__webpack_require__.r(__webpack_exports__);

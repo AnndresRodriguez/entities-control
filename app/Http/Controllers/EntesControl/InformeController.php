@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\EntesControl;
 
+use DateTime;
 use App\Alarma;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Informe;
 use App\Normativa;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class InformeController extends Controller
 {
@@ -115,6 +117,21 @@ class InformeController extends Controller
         }
 
 
+
+    }
+
+    public function getInformes(){
+
+        $alarms = DB::table('alarmas')
+                    ->join('informes', 'alarmas.id_informe', '=', 'informes.id')
+                    ->join('dependencias', 'informes.id_dependencia', '=', 'dependencias.id')
+                    ->join('entes', 'informes.id_ente_control', '=', 'entes.id')
+                    ->select('informes.fecha_creacion', 'informes.nombre as nombre_informe'
+                    ,'entes.nombre as nombre_ente', 'dependencias.responsable', 'dependencias.nombre as nombre_dependencia', 'informes.estado', 'informes.fecha_entrega')
+                    ->get();
+
+
+        return response()->json(["alarms" => $alarms], 200);
 
     }
 }

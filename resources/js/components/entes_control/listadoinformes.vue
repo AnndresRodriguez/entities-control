@@ -181,10 +181,8 @@ import util from './utilities'
 export default {
 
     mounted(){
-       axios.get('http://localhost:3000/entes_control/dependencias')
-       .then( res => {
-           this.dependencias = res.data.dependencias;
-       })
+       this.getAllDependencies();
+       this.getAllInformes();
     },
 
     data() {
@@ -197,7 +195,20 @@ export default {
     methods: {
         getDependenciaSelected(dependenciaSelected){
             console.log(dependenciaSelected)
+        },
+
+        getAllDependencies(){
+            axios.get('http://localhost:3000/entes_control/dependencias')
+            .then( res => {
+                this.dependencias = res.data.dependencias;
+            })
+        },
+
+        getAllInformes(){
+            axios.get('http://localhost:3000/entes_control/get_informes')
+                .then( res => { console.log(res.data) })
         }
+
     }
 
 }
