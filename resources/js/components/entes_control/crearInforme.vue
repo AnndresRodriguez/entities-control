@@ -232,9 +232,10 @@
                                                         v-model="dataAlarma"
                                                         title='Alarma de previo aviso'
                                                         :phrases="{ok: 'Seleccionar', cancel: 'Cancelar'}"
-                                                        :max-datetime="initializeMaxTimeAlarm"
+
                                                         >
                                                         </datetime>
+                                                        <!-- :max-datetime="initializeMaxTimeAlarm" -->
                                                     </span>
                                                 </div>
                                             </div>
@@ -343,12 +344,13 @@
 
 <script>
 
-import vue2Dropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import vue2Dropzone from 'vue2-dropzone';
+import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 import { Datetime } from 'vue-datetime';
-import 'vue-datetime/dist/vue-datetime.css'
+import 'vue-datetime/dist/vue-datetime.css';
 import $ from 'jquery';
-import { formatDate, removeBlankSpaces, formatISO8601, addDays, addMonths, addYear } from './utilities'
+import { formatDate, removeBlankSpaces, formatISO8601, addDays, addMonths, addYear } from './utilities';
+import URL_HUEM from './utilities';
 
 export default {
 
@@ -519,7 +521,7 @@ export default {
 
             getAllEntes: function(){
 
-                axios.get('http://localhost:3000/entes_control/entes')
+                axios.get(`${URL_HUEM}/entes_control/entes`)
                 .then( res => {
 
                     this.entesControl = res.data.entes
@@ -528,7 +530,7 @@ export default {
 
             getAllDependencias: function(){
 
-                axios.get('http://localhost:3000/entes_control/dependencias')
+                axios.get(`${URL_HUEM}/entes_control/dependencias`)
                 .then( res => {
                     this.dependencias = res.data.dependencias
                      })
@@ -618,7 +620,7 @@ export default {
 
             editarNombreEnte: function() {
 
-                axios.post('http://localhost:3000/entes_control/editar_ente', { id: this.idEnteSelect,nuevoNombre: this.nombreEnteSelect }, { headers: {'Content-Type': 'application/json'} })
+                axios.post(`${URL_HUEM}/entes_control/editar_ente`, { id: this.idEnteSelect,nuevoNombre: this.nombreEnteSelect }, { headers: {'Content-Type': 'application/json'} })
                 .then(res => {
                     console.log(res)
                     if(!res.data.error){
@@ -656,103 +658,82 @@ export default {
 
                 // this.crearFechasEntregas();
 
-                // this.validatedata = true
-                // if(removeBlankSpaces(this.nombreInforme) == ''){
+                this.validatedata = true
+                if(removeBlankSpaces(this.nombreInforme) == ''){
 
-                //     this.getToast('info', 'Debe asignar un nombre al informe', 'fa-times')
-                //     // document.getElementById('divnombre').classList.add('has-error')
+                    this.getToast('info', 'Debe asignar un nombre al informe', 'fa-times')
+                    // document.getElementById('divnombre').classList.add('has-error')
 
-                // } else if(this.idEnteSelect == ''){
+                } else if(this.idEnteSelect == ''){
 
-                //     this.getToast('info', 'Debe seleccionar el ente al que se realiza el informe', 'fa-times')
+                    this.getToast('info', 'Debe seleccionar el ente al que se realiza el informe', 'fa-times')
 
-                // } else if(this.file == ''){
+                } else if(this.file == ''){
 
-                //     this.getToast('info', 'Debe seleccionar el archivo correspondiente a la normativa del informe', 'fa-times')
+                    this.getToast('info', 'Debe seleccionar el archivo correspondiente a la normativa del informe', 'fa-times')
 
-                // } else if(this.idDependencia == ''){
+                } else if(this.idDependencia == ''){
 
-                //     this.getToast('info', 'Debe seleccionar la dependencia responsable', 'fa-times')
+                    this.getToast('info', 'Debe seleccionar la dependencia responsable', 'fa-times')
 
 
-                // } else if(this.dataEntrega == ''){
-                //     this.getToast('info', 'Debe seleccionar la fecha de entrega del informe', 'fa-times')
-                // }
-                //   else if(this.periodoSelect == ''){
-                //     this.getToast('info', 'Debe seleccionar el periodo de repetición de informe', 'fa-times')
-                // }
+                } else if(this.dataEntrega == ''){
+                    this.getToast('info', 'Debe seleccionar la fecha de entrega del informe', 'fa-times')
+                }
+                  else if(this.periodoSelect == ''){
+                    this.getToast('info', 'Debe seleccionar el periodo de repetición de informe', 'fa-times')
+                }
 
                 //   else if(this.dataFinalizacion == ''){
 
                 //     this.getToast('info', 'Debe seleccionar hasta que fecha se entregará este informe', 'fa-times')
 
-                // } else if(this.dataAlarma == ''){
-
-
-                //     this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
-
-                // } else if(this.rawDataAlarmas.length < 1) {
-
-                //     this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
-
-                // } else {
-
-                //     let formData = new FormData();
-                //     formData.append('nombre', this.nombreInforme);
-                //     formData.append('id_ente_control', this.idEnteSelect);
-                //     formData.append('id_dependencia', this.idDependencia);
-                //     formData.append('normativa', this.file);
-                //     formData.append('fecha_entrega', new Date(this.dataEntrega));
-                //     formData.append('fecha_final_entregas', new Date(this.dataFinalizacion));
-                //     // formData.append('alarmas', JSON.stringify(this.rawDataAlarmas))
-                //     this.rawDataAlarmas.map( alarma => {
-                //         formData.append('alarmas[]', new Date(alarma));
-                //     });
-
-                //     axios.post('http://localhost:3000/entes_control/crear_informe',
-                //     formData,
-                //     { headers: {'Content-Type':'multipart/form-data'} })
-                //     .then( res => {
-                //         if(!res.data.error){
-                //             // this.getToast('success', `${res.data.message}`, 'fa-check')
-                //             Swal({ title: 'Informe creado exitosamente', type: 'success', showConfirmButton: false, timer: 3000 });
-
-
-
-                //         }else {
-
-                //             Swal({ title: 'Informe creado exitosamente', type: 'error', showConfirmButton: false, timer: 3000 });
-
-                //             // console.log(res.data.errorMessage)
-                //             // this.getToast('error', `${res.data.message}`, 'fa-times')
-                //         }
-
-                //     })
-
                 // }
 
+                else if(this.dataAlarma == ''){
 
 
+                    this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
+
+                } else if(this.rawDataAlarmas.length < 1) {
+
+                    this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
+
+                } else {
+
+                    let formData = new FormData();
+                    formData.append('nombre', this.nombreInforme);
+                    formData.append('id_ente_control', this.idEnteSelect);
+                    formData.append('id_dependencia', this.idDependencia);
+                    formData.append('normativa', this.file);
+                    formData.append('fecha_entrega', new Date(this.dataEntrega));
+                    formData.append('fecha_final_entregas', new Date(this.dataFinalizacion));
+                    // formData.append('alarmas', JSON.stringify(this.rawDataAlarmas))
+                    this.rawDataAlarmas.map( alarma => {
+                        formData.append('alarmas[]', new Date(alarma));
+                    });
+
+                    axios.post(`${URL_HUEM}/entes_control/crear_informe`,
+                    formData,
+                    { headers: {'Content-Type':'multipart/form-data'} })
+                    .then( res => {
+                        if(!res.data.error){
+                            // this.getToast('success', `${res.data.message}`, 'fa-check')
+                            Swal({ title: 'Informe creado exitosamente', type: 'success', showConfirmButton: false, timer: 3000 });
+
+                        }else {
+
+                            Swal({ title: 'Informe creado exitosamente', type: 'error', showConfirmButton: false, timer: 3000 });
+
+                            // console.log(res.data.errorMessage)
+                            // this.getToast('error', `${res.data.message}`, 'fa-times')
+                        }
+
+                    })
+
+                }
 
 
-
-                // console.log(this.alarmaSelect);
-                // let formData = new FormData();
-                // formData.append('normativa', this.file);
-                // console.log(this.file)
-
-                // formData.append('evidencias[]', this.evidencias)
-                // this.evidencias.map( evidencia => {
-                //     formData.append('evidencia[]', evidencia);
-                // });
-
-                // axios.post('http://localhost:3000/entes_control/crear_informe', formData,  { headers: { 'Content-Type': 'multipart/form-data'}})
-                // .then(res => {
-                //     console.log(res)
-                // })
-                // .catch(err => {
-                //     console.log(err)
-                // });
 
             },
 
@@ -853,19 +834,11 @@ export default {
                 // }
 
             }
-
-
-
-
-
-
-
 		}
 	}
 </script>
 
 <style scoped>
-
 
 	.d-flex{
     display: flex;

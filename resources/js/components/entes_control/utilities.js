@@ -1,34 +1,6 @@
 
-const util = {
+const URL_HUEM =  'http://localhost:3000'
 
-    informes: [ {
-        fechaCreacion: '06/06/2020',
-        nombre: 'Informe 1',
-        enteControl: 'MINSALUD',
-        responsable: 'Responsable 1',
-        dependencia: 'SIAU',
-        estado: false
-    },
-    {
-        fechaCreacion: '06/07/2020',
-        nombre: 'Informe 2',
-        enteControl: 'MINSALUD',
-        responsable: 'Responsable 2',
-        dependencia: 'EPIDEMIOLOGÍA',
-        estado: false
-    },
-    {
-        fechaCreacion: '06/07/2020',
-        nombre: 'Informe 3',
-        enteControl: 'SUPERINTENDENCIA',
-        responsable: 'Responsable 2',
-        dependencia: 'SISTEMAS',
-        estado: true
-    }]
-
-}
-
-export default util;
 
 export function validateEmail(email){
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -42,43 +14,27 @@ export function removeBlankSpaces(data){
 
 export function addDays(date, days) {
 
-    console.log('receivedday', date )
-
     let result = new Date(date.setDate(date.getDate() + days));
-    console.log('days', days )
-
-    console.log('convertedday', result )
-    // result.setDate(date.getDate() + days);
     return result;
 }
 
 export function addMonths(date, months) {
 
-    // let result = new Date(date);
     let result = new Date(date.setMonth(date.getMonth() + months));
-    // result.setDate(date.getMonth() + months);
-    console.log('months', months )
-    console.log('received', date )
-    console.log('converted', result )
     return result;
 }
 
 export function addYear(date, years) {
 
-    // let result = new Date(date);
     let result = new Date(date.setFullYear(date.getFullYear() + years));
-    // result.setDate(date.getFullYear() + years);
     return result;
 }
 
 export function discountDays(date, days) {
     let result = new Date(date);
-    // console.log(result)
     result.setDate(date.getDate() - days);
     return result;
 }
-
-
 
 export function formatHour(hour){
     let timeString = hour;
@@ -101,9 +57,6 @@ export function formatHour(hour){
 }
 
 export function formatDate(date) {
-
-
-    let horas = date.getHours();
 
     return `Alarma creada para el ${(date.getDate())} de ${(getNameMonth(date.getMonth() + 1 ))} de ${date.getFullYear()} a las ${formatHour(`${date.getHours()}:${date.getMinutes()}`)}`
 
@@ -155,3 +108,5 @@ function getNameMonth(month){
 
 
 }
+
+export default URL_HUEM;

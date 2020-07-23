@@ -285,6 +285,7 @@ import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import $ from 'jquery';
 import { validateEmail, removeBlankSpaces } from './utilities'
+import URL_HUEM from './utilities'
 
 export default {
 
@@ -324,7 +325,7 @@ export default {
 
                 $(function (){ $('[data-toggle="tooltip"]').tooltip()})
 
-                axios.get('http://localhost:3000/entes_control/entes')
+                axios.get(`${URL_HUEM}/entes_control/entes`)
                 .then( res => {
 
                     this.entesControl = res.data.entes
@@ -334,10 +335,10 @@ export default {
 
             getAllDependencias: function(){
 
-                axios.get('http://localhost:3000/entes_control/dependencias')
+                axios.get(`${URL_HUEM}/entes_control/dependencias`)
                 .then( res => {
                     this.dependencias = res.data.dependencias
-                     })
+                })
             },
 
 
@@ -371,7 +372,7 @@ export default {
 
                 }else {
 
-                    axios.post('http://localhost:3000/entes_control/crear_ente',
+                    axios.post(`${URL_HUEM}/entes_control/crear_ente`,
                            { nombre: this.nuevoEnte },
                            { headers: {'Content-Type': 'application/json'}})
                 .then( res => {
@@ -417,7 +418,7 @@ export default {
 
                 }else{
 
-                    axios.post('http://localhost:3000/entes_control/editar_ente', { id: this.idEnteSelect,nuevoNombre: this.nombreEnteSelect }, { headers: {'Content-Type': 'application/json'} })
+                    axios.post(`${URL_HUEM}/entes_control/editar_ente`, { id: this.idEnteSelect,nuevoNombre: this.nombreEnteSelect }, { headers: {'Content-Type': 'application/json'} })
                     .then(res => {
                     console.log(res)
                     if(!res.data.error){
@@ -452,7 +453,7 @@ export default {
                 }else {
 
 
-                axios.post('http://localhost:3000/entes_control/crear_dependencia',
+                axios.post(`${URL_HUEM}/entes_control/crear_dependencia`,
                 {
                     nombre: this.nuevaDependencia,
                     correo: this.nuevoResponsable,
@@ -492,7 +493,7 @@ export default {
 
                 }else{
 
-                    axios.post('http://localhost:3000/entes_control/editar_dependencia', { id: this.idDependencia, nombre: this.nombreDependencia, responsable: this.responsableDependencia, correo: this.emailDependencia }, { headers: {'Content-Type': 'application/json'} })
+                    axios.post(`${URL_HUEM}/entes_control/editar_dependencia`, { id: this.idDependencia, nombre: this.nombreDependencia, responsable: this.responsableDependencia, correo: this.emailDependencia }, { headers: {'Content-Type': 'application/json'} })
                     .then(res => {
                     console.log(res)
                     if(!res.data.error){

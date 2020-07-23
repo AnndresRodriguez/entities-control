@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EntesControl;
 
 use DateTime;
 use App\Alarma;
+use App\Evidencia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Informe;
@@ -23,6 +24,45 @@ class InformeController extends Controller
         $informes = Informe::get();
         return response()->json(['informes' => $informes], 200);
 
+    }
+
+    public function anexarEvidencias(Request $request){
+
+        $evidencias = $request->file('evidencia');
+        $id_informe = $request->id_informe;
+
+        try {
+            for($index=0; $index < count($evidencias); $index++){
+                $evidenciapath = $evidencias[$index];
+                $nombreFileEvidencia = $evidenciapath->getClientOriginalName();
+                // $evidencia->move(storage_path('public/evidencias'), $nombreFileEvidencia);
+                Storage::putFileAs('public/evidencias', $evidenciapath, $evidenciapath->getClientOriginalName());
+                $pathsEvidencias[$index] = 'http://localhost:3000/storage/evidencias/'.$nombreFileEvidencia;
+                $evidencia_filename = pathinfo($nombreFileEvidencia, PATHINFO_FILENAME);
+
+                $evidencia = new Evidencia();
+                $evidencia->nombre = $evidencia_filename;
+                $evidencia->url_evidencia = 'http://localhost:3000/storage/evidencias/'.$nombreFileEvidencia;
+                $evidencia->id_informe = $id_informe;
+                $evidencia->fecha_creacion = now();
+                $evidencia->fecha_edicion = now();
+                $evidencia->save();
+
+            }
+
+            return response()->json([ "error" => false, "evidencias" => $pathsEvidencias,   "message" => 'Evidencias Subidas con éxito', "errorMessage" => '' ], 200);
+
+        } catch(\Throwable $th){
+
+            return response()->json([ "error" => true, "evidencias" => [], "message" => 'Ha ocurrido un error intente nuevamente', "errorMessage" => $th ], 202);
+        }
+
+    }
+
+    public function getEvidenciasById(Request $request){
+        $evidencias = Evidencia::where('id_informe', $request->id_informe)->get();
+        // $evidencias = Evidencia::find($request->id_informe);
+        return response()->json(["evidencias" => $evidencias], 200);
     }
 
     public function crearInforme(Request $request)
@@ -84,32 +124,10 @@ class InformeController extends Controller
 
         }
 
-        // $pathsEvidencias = array();
         // $normativa->move(storage_path('public/normativas'), $nombreFileNormativa);
-
-        // $evidencias = $request->file('evidencia');
-
-        // for($index=0; $index < count($evidencias); $index++){
-        //     $evidencia = $evidencias[$index];
-        //     $nombreFileEvidencia = $evidencia->getClientOriginalName();
-        //     // $evidencia->move(storage_path('public/evidencias'), $nombreFileEvidencia);
-        //     Storage::putFileAs('public/evidencias', $evidencia, $evidencia->getClientOriginalName());
-        //     $pathsEvidencias[$index] = 'evidencias/'.$nombreFileEvidencia;
-        // }
-
-        // return response()->json([
-        //      "idInforme" => $informe->id,
-        //      "nombre" => $request->nombre,
-        //      "idNormativa" => $normativa->id,
-        //      "urlnormativa" => $pathNormativa,
-        //      "fechaEntrega" => $format_fecha_entrega,
-        //      "alarmas" => $alarmas,
-        //      "lengthAlarmas" => count($alarmas)
-        // ], 200);
 
         return response()->json([ "error" => false, "message" => 'Informe '.$request->nombre.' creado con éxito', "errorMessage" => '' ], 200);
 
-            //code...
         } catch (\Throwable $th) {
 
             return response()->json([ "error" => true, "message" => 'Ha ocurrido un error al crear el informe, intente nuevamente', "errorMessage" => $th ], 202);
@@ -122,16 +140,39 @@ class InformeController extends Controller
 
     public function getInformes(){
 
-        $alarms = DB::table('alarmas')
-                    ->join('informes', 'alarmas.id_informe', '=', 'informes.id')
+        $informes = DB::table('informes')
                     ->join('dependencias', 'informes.id_dependencia', '=', 'dependencias.id')
                     ->join('entes', 'informes.id_ente_control', '=', 'entes.id')
                     ->select('informes.fecha_creacion', 'informes.nombre as nombre_informe'
-                    ,'entes.nombre as nombre_ente', 'dependencias.responsable', 'dependencias.nombre as nombre_dependencia', 'informes.estado', 'informes.fecha_entrega')
+                    ,'entes.nombre as nombre_ente', 'dependencias.responsable', 'dependencias.nombre as nombre_dependencia', 'informes.estado', 'informes.fecha_entrega', 'informes.id')
                     ->get();
 
 
-        return response()->json(["alarms" => $alarms], 200);
+        return response()->json(["informes" => $informes], 200);
+
+    }
+
+    public function setEstadoInforme(Request $request){
+
+        try {
+
+            $informe = Informe::find($request->id_informe);
+            $informe->estado = 1;
+            $informe->save();
+
+            return response()->json([ "error" => false, "message" => 'Informe actualizado con éxito', "dataInforme" => $informe, "errorMessage" => '' ], 200);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([ "error" => true, "message" => 'Ha ocurrido un error intente nuevamente', "dataInforme" => $informe, "errorMessage" => $th ], 202);
+
+        }
+
+        // $informe = Informe::where('id', $request->id_informe)->get();
+
+
+
+
 
     }
 }

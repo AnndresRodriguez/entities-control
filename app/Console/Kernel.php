@@ -62,9 +62,6 @@ class Kernel extends ConsoleKernel
 
                }
 
-
-
-
         })->twiceDaily(7, 12)->timezone('America/New_York');
 
 

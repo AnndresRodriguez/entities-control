@@ -8,6 +8,9 @@
 Route::get('/entes_control/informes', 'InformeController@index');
 Route::post('/entes_control/crear_informe', 'InformeController@crearInforme');
 Route::get('/entes_control/get_informes', 'InformeController@getInformes');
+Route::post('/entes_control/anexar_evidencias', 'InformeController@anexarEvidencias');
+Route::post('/entes_control/get_evidencias', 'InformeController@getEvidenciasById');
+Route::post('/entes_control/set_status_informe', 'InformeController@setEstadoInforme');
 
 
 Route::get('/entes_control/dependencias', 'DependenciaController@index');

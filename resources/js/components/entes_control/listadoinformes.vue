@@ -68,6 +68,12 @@
                                         </div>
 
                                         <div class="col-md-12">
+                                            <template v-if="informes.length == 0">
+                                                        <div class="dflex flex-row justify-center" style="height:100% ba">
+                                                            <div class="lds-dual-ring"></div>
+                                                        </div>
+                                            </template>
+                                            <template v-else>
                                             <div class="form-group">
                                              <table class="table">
                                                 <thead>
@@ -75,46 +81,62 @@
                                                         <th scope="col">Fecha de Creación</th>
                                                         <th scope="col">Nombre</th>
                                                         <th scope="col">Ente de Control</th>
-                                                        <th scope="col">Responsable</th>
                                                         <th scope="col">Dependencia</th>
+                                                        <th scope="col">Fecha Entrega</th>
                                                         <th scope="col">Estado</th>
-                                                        <th scope="col">Evidencias</th>
+                                                        <th scope="col">Acciones Evidencias</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr v-for="(informe, index) in informes" :key="index">
-                                                        <th scope="row">{{ informe.fechaCreacion }}</th>
+
+
+                                                    <tbody>
+                                                        <tr v-for="(informe, index) in informes" :key="index">
+
+                                                            <span class="fontsize16">
+                                                            {{ informe.fecha_creacion.split(' ')[0] }}</span>
+
                                                         <td>
-                                                            <span class="fontsize16">{{ informe.nombre }}</span>
+                                                            <span class="fontsize16">{{ informe.nombre_informe }}</span>
                                                         </td>
                                                         <td>
-                                                            <span class="fontsize16">{{ informe.enteControl }}</span>
+                                                            <span class="fontsize16">{{ informe.nombre_ente }}</span>
                                                         </td>
                                                         <td>
-                                                            <span class="fontsize16">{{ informe.responsable }}</span>
+                                                            <span class="fontsize16">{{ informe.nombre_dependencia }}</span>
                                                         </td>
                                                         <td>
-                                                            <span class="fontsize16">{{ informe.dependencia }}</span>
+                                                            <span class="fontsize18" style="background-color: #FFFCBA ">{{ informe.fecha_entrega.split(' ')[0] }}</span>
                                                         </td>
                                                         <td>
-                                                            <span class="badge fontsize16" :class="informe.estado ? 'bg-success': 'bg-warning'">{{ informe.estado ? 'Completado' : 'Pendiente' }}</span>
+                                                            <span class="badge fontsize16" :class="informe.estado == 1 ? 'bg-success': 'bg-warning'">{{ informe.estado ? 'Completado' : 'Pendiente' }}</span>
                                                         </td>
                                                         <td>
                                                             <div class="dflex justify-around">
-                                                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+                                                                <span @click="setIdInforme(informe.id)">
+                                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalCargar"  >
                                                                     <i class="fas fa-upload"></i>
                                                                     Cargar
                                                                 </button>
-                                                                <button class="btn btn-primary">
-                                                                    <i class="fas fa-eye"></i>
-                                                                    Visualizar
-                                                                </button>
+                                                                </span>
+                                                                <span @click="getEvidencias(informe.id)">
+
+                                                                    <button type="button" class="btn btn-primary"
+                                                                    data-toggle="modal"
+                                                                    data-target="#modalVerEvidencias">
+                                                                        <i class="fas fa-eye"></i>
+                                                                        Ver
+                                                                    </button>
+
+                                                                </span>
+
                                                             </div>
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                                </table>
+
+                                            </table>
                                             </div>
+                                            </template>
                                         </div>
 
 
@@ -135,28 +157,84 @@
 								</div>
 							</div>
                             <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalCargar" tabindex="-1" role="dialog" aria-labelledby="modalCargarLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel">Carga de Evidencias</h4>
-        <p class="fontsize16" >Si las evidencias están completas marquelo en el check "Evidencias Completas"</p>
+        <h4 class="modal-title" id="modalCargarLabel">Carga de Evidencias</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, eveniet animi? Hic expedita possimus harum repellendus. Blanditiis error necessitatibus dignissimos?
+
+
+
+        <label> Evidencias de informe</label>
+            <vue-dropzone ref="myVueDropzone" id="myVueDropzone" :options="dropzoneOptions"  :useCustomSlot=true @vdropzone-success-multiple="loadMulipleFiles">
+                <h3 class="dropzone-custom-title">Arrastre y suba sus evidencias de Informe aquí <i class="fa fa-upload" aria-hidden="true"></i></h3>
+                <div class="subtitle">...o un Click para seleccionar desde su computador</div>
+            </vue-dropzone>
       </div>
       <div class="modal-footer">
 
         <div class="dflex flex-row justify-between  align-items-center">
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="evidencias">
-                <label class="form-check-label fontsize16" for="exampleCheck1">Evidencias Completas</label>
-            </div>
+
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Descartar Cambios</button>
-            <button type="button" class="btn btn-success">Guardar Cambios</button>
+            <button type="button" class="btn btn-success" @click="sendEvidencias">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalVerEvidencias" tabindex="-1" role="dialog" aria-labelledby="modalVerEvidenciaslabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modalVerEvidenciaslabel">Listado de Evidencias</h4>
+        <p class="fontsize16" >Si están completas marquelo oprima el botón " Confirmar Evidencias Completas"</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="panel panel-default" style="margin-top: 10px">
+            <div class="panel-heading">Evidencias Subidas</div>
+            <div class="panel-body">
+                 <template v-if="evidenciasModal.length == 0">
+                     <div style="height: 100%" >
+                         <label> Este informe no tiene evidencias asociadas</label>
+                     </div>
+                 </template>
+                 <template v-else>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Fecha de Subida</th>
+                                <th>Archivo de Evidencia</th>
+                                <!-- <th>Email</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(evidencia, index) in evidenciasModal" :key="index">
+                            <td>{{ evidencia.fecha_creacion }}</td>
+                            <td> <a :href="evidencia.url_evidencia" target="_blank"> {{ evidencia.nombre }}  </a> </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                 </template>
+
+            </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+
+        <div class="dflex flex-row justify-between  align-items-center">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-success" @click="setStatusInforme">Confirmar Evidencias Completadas</button>
         </div>
       </div>
     </div>
@@ -176,9 +254,16 @@
 </template>
 <script>
 
-import util from './utilities'
+import vue2Dropzone from 'vue2-dropzone';
+import 'vue2-dropzone/dist/vue2Dropzone.min.css';
+import URL_HUEM from './utilities';
+import $ from 'jquery';
 
 export default {
+
+    components: {
+        vueDropzone: vue2Dropzone
+    },
 
     mounted(){
        this.getAllDependencies();
@@ -187,9 +272,23 @@ export default {
 
     data() {
         return {
-            informes: util.informes,
+            informes: [],
             dependencias: [],
-            dependenciaSelect: ''
+            dependenciaSelect: '',
+            evidencias: [],
+            evidenciasModal: [],
+            dropzoneOptions: {
+                    url: 'https://httpbin.org/post',
+                    thumbnailWidth: 200,
+                    thumbnailHeight: 200,
+                    maxFilesize: 10,
+                    addRemoveLinks: true,
+                    dictRemoveFile: 'Borrar',
+                    uploadMultiple: true,
+                    maxFiles: 10,
+                    parallelUploads: 10
+            },
+            idInformeSelected: 0
         }
     },
     methods: {
@@ -198,16 +297,136 @@ export default {
         },
 
         getAllDependencies(){
-            axios.get('http://localhost:3000/entes_control/dependencias')
+            axios.get(`${URL_HUEM}/entes_control/dependencias`)
             .then( res => {
                 this.dependencias = res.data.dependencias;
             })
         },
 
         getAllInformes(){
-            axios.get('http://localhost:3000/entes_control/get_informes')
-                .then( res => { console.log(res.data) })
-        }
+            axios.get(`${URL_HUEM}/entes_control/get_informes`)
+                .then( res => {
+                console.log(res.data.informes)
+                this.informes = res.data.informes
+            })
+        },
+
+        loadMulipleFiles(files, response){
+
+            this.evidencias = files
+            console.log(files);
+
+        },
+
+        sendEvidencias(){
+
+            let formData = new FormData();
+
+            formData.append('id_informe', this.idInformeSelected)
+            formData.append('evidencias[]', this.evidencias)
+                this.evidencias.map( evidencia => {
+                    formData.append('evidencia[]', evidencia);
+            });
+
+            axios.post(`${URL_HUEM}/entes_control/anexar_evidencias`, formData, {  headers: {'Content-Type': 'multipart/form-data'} })
+            .then(res => {
+
+                if(!res.data.error){
+                    $('#modalCargar').modal('hide');
+                    Swal({ title: `${res.data.message}`, type: 'success', showConfirmButton: false, timer: 2500 });
+                }else {
+                    $('#modalCargar').modal('hide');
+                    Swal({ title: `${res.data.message}`, type: 'error', showConfirmButton: false, timer: 2500 });
+
+                }
+
+
+
+                // console.log(res.data.evidencias)
+
+            })
+
+
+
+
+        },
+
+        setIdInforme(idselected){
+            this.idInformeSelected = idselected;
+        },
+
+
+        setStatusInforme(){
+
+            Swal.fire({
+                title: '¿Las Evidencias de este Informe están completas?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#00a65a',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'CANCELAR',
+                confirmButtonText: 'CONFIRMAR'
+                }).then((result) => {
+                if (result.value) {
+
+                    $('#modalVerEvidencias').modal('hide');
+                    axios.post(`${URL_HUEM}/entes_control/set_status_informe`, { id_informe: this.idInformeSelected } , {
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then( res => {
+                if(!res.data.error){
+
+                    this.getToast('success', `${res.data.message}`, 'fa-check');
+                    this.getAllInformes();
+                }else {
+
+                    $('#modalVerEvidencias').modal('hide');
+                    this.getToast('error', `${res.data.message}`, 'fa-times');
+                }
+            })
+
+
+
+                    Swal.fire(
+                    'Estado de Informe Actualizado',
+                    'Las evidencias están completas',
+                    'success'
+                    )
+                } else {
+                    $('#modalVerEvidencias').modal('hide');
+                }
+                })
+
+
+
+
+
+        },
+
+        getEvidencias(idinforme){
+
+            this.idInformeSelected = idinforme;
+
+            axios.post(`${URL_HUEM}/entes_control/get_evidencias`, { id_informe: idinforme } , {
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then( res => {
+                this.evidenciasModal = res.data.evidencias
+            })
+        },
+
+        getToast: function( type, message, iconFontAwesome ){
+
+                this.$toasted.show(`${message}`,
+                        {
+                            icon: { name: `${iconFontAwesome}` },
+                            type: `${type}`,
+	                        position: "bottom-right",
+                            duration : 5000
+                        }).goAway(2000);
+            },
+
+
 
     }
 
@@ -308,5 +527,33 @@ export default {
         width: 1.3em;
         height: 1.4em;
     }
+
+ /* Spinner  */
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #337ab7;
+  border-color: #337ab7 transparent #337ab7 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 </style>
