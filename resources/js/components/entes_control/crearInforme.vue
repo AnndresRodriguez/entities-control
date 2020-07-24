@@ -175,20 +175,23 @@
 
                                         <template v-if="personalizado">
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label> <i class="fas fa-sync-alt"></i>  Se repite cada cuanto (Cantidad) </label>
                                                     <input class="form-control" type="number" value="1" id="cantidad" min="1"  v-model="repeticion">
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <label> Periodo personalizado </label>
-                                                <select class="form-control" id="selectfrecuencia" required @change="getPersonalizado(tipopersonalizado)" v-model="tipopersonalizado">
-                                                    <option selected="selected" value="" disabled="disabled">SELECCIONE UNA OPCIÓN</option>
-                                                    <option value="DIAS">DÍAS</option>
-                                                    <option value="MESES">MESES</option>
-                                                    <option value="AÑOS">AÑOS</option>
-                                                </select>
+                                            <div class="col-md-4">
+
+                                                <div class="form-group" :class="emptyPersonalizado">
+                                                    <label> Periodo personalizado </label>
+                                                    <select class="form-control" id="selectfrecuencia" required @change="getPersonalizado(tipopersonalizado)" v-model="tipopersonalizado">
+                                                        <option selected="selected" value="" disabled="disabled">SELECCIONE UNA OPCIÓN</option>
+                                                        <option value="D">DÍAS</option>
+                                                        <option value="M">MESES</option>
+                                                        <option value="A">AÑOS</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                         </template>
@@ -253,8 +256,6 @@
                                                 </template>
                                             </div>
                                         </div>
-
-
 									</div>
 									<div class="panel-footer">
 										<button class="btn btn-primary" id="crear-informe" @click="crearInforme">
@@ -367,8 +368,7 @@ export default {
                 dataInitialCalendar:'',
                 periodoRepeticion: '',
                 periodo: 'D', agregarCantidad: 0,
-                entregas: [],
-                disabledInputAlarma: true
+                entregas: []
 
 			})
 		},
@@ -446,9 +446,21 @@ export default {
             },
             emptyPeriodoSelect: function(){
                 if(this.validatedata){
-                    return this.periodoSelect == '' ? ' has-error' : ''
+                    console.log('empty periodo select', this.periodoSelect)
+                    if(this.periodoSelect != "4"){
+                        return this.periodoSelect == '' ? ' has-error' : ''
+                    }
                 }
                 return ''
+            },
+
+            emptyPersonalizado: function(){
+
+                if(this.validatedata){
+                    return this.tipopersonalizado == '' ? ' has-error' : ''
+                }
+                return ''
+
             },
 
             emptyDataFinalizacion: function(){
@@ -504,6 +516,8 @@ export default {
             },
 
             getPeriodoRepeticion: function(periodoselected){
+
+                console.log(this.periodoSelect);
                 this.personalizado = periodoselected == 4
 
                 if (periodoselected != 'D' || periodoselected != 'Q'){
@@ -622,14 +636,12 @@ export default {
             crearInforme(){
 
 
-
-                // this.crearFechasEntregas();
-
                 this.validatedata = true
+
+
                 if(removeBlankSpaces(this.nombreInforme) == ''){
 
                     this.getToast('info', 'Debe asignar un nombre al informe', 'fa-times')
-                    // document.getElementById('divnombre').classList.add('has-error')
 
                 } else if(this.idEnteSelect == ''){
 
@@ -647,20 +659,29 @@ export default {
                 } else if(this.dataEntrega == ''){
                     this.getToast('info', 'Debe seleccionar la fecha de entrega del informe', 'fa-times')
                 }
-                  else if(this.periodoSelect == ''){
+                  else if(this.periodoSelect  == '' && this.periodoSelect != '4' ){
                     this.getToast('info', 'Debe seleccionar el periodo de repetición de informe', 'fa-times')
                 }
 
+                  else if(this.personalizado){
+                        if (this.tipopersonalizado == '') {
+                            this.getToast('info', 'Debe seleccionar una opcion personalizada', 'fa-times')
+                        }
+                }
+
                 else if(this.dataAlarma == ''){
-
-
                     this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
 
-                } else if(this.rawDataAlarmas.length < 1) {
+                }
 
-                    this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times')
+                else if(this.rawDataAlarmas.length < 1) {
+                    this.getToast('info', 'Debe añadir mínimo una alarma para el informe ', 'fa-times')
 
-                } else {
+                }
+
+                else {
+
+                    this.crearFechasEntregas();
 
                     let formData = new FormData();
                     formData.append('nombre', this.nombreInforme);
@@ -679,23 +700,17 @@ export default {
                     { headers: {'Content-Type':'multipart/form-data'} })
                     .then( res => {
                         if(!res.data.error){
-                            // this.getToast('success', `${res.data.message}`, 'fa-check')
+
                             Swal({ title: 'Informe creado exitosamente', type: 'success', showConfirmButton: false, timer: 3000 });
+
 
                         }else {
 
                             Swal({ title: 'Informe creado exitosamente', type: 'error', showConfirmButton: false, timer: 3000 });
-
-                            // console.log(res.data.errorMessage)
-                            // this.getToast('error', `${res.data.message}`, 'fa-times')
                         }
 
                     })
-
                 }
-
-
-
             },
 
             loadMulipleFiles(files, response){
@@ -726,12 +741,21 @@ export default {
                 this.periodoSelect = '';
                 this.dataFinalizacion = '';
                 this.dataAlarma = '';
+
                 this.rawDataAlarmas = [];
                 this.validatedata = false;
+                this.tipopersonalizado = '';
 
             },
 
             crearFechasEntregas: function(){
+
+                if (this.personalizado){
+
+                    this.agregarCantidad = parseInt(this.repeticion);
+                    this.periodoSelect= this.tipopersonalizado;
+
+                }
 
                 console.log(this.dataEntrega)
                 console.log(this.agregarCantidad)
@@ -767,7 +791,9 @@ export default {
                             this.entregas.push(tempCurrentFecha);
                         }
                     }
-                    console.log('anuales', this.entregas)
+
+                    console.log('anualmente', this.entregas)
+
                 } else {
 
                     let tempCurrentFecha = ''

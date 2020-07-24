@@ -29517,7 +29517,7 @@ var render = function() {
                         _vm.personalizado
                           ? [
                               _c("div", { staticClass: "row" }, [
-                                _c("div", { staticClass: "col-md-3" }, [
+                                _c("div", { staticClass: "col-md-4" }, [
                                   _c("div", { staticClass: "form-group" }, [
                                     _vm._m(4),
                                     _vm._v(" "),
@@ -29550,86 +29550,95 @@ var render = function() {
                                   ])
                                 ]),
                                 _vm._v(" "),
-                                _c("div", { staticClass: "col-md-3" }, [
-                                  _c("label", [
-                                    _vm._v(" Periodo personalizado ")
-                                  ]),
-                                  _vm._v(" "),
+                                _c("div", { staticClass: "col-md-4" }, [
                                   _c(
-                                    "select",
+                                    "div",
                                     {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.tipopersonalizado,
-                                          expression: "tipopersonalizado"
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: {
-                                        id: "selectfrecuencia",
-                                        required: ""
-                                      },
-                                      on: {
-                                        change: [
-                                          function($event) {
-                                            var $$selectedVal = Array.prototype.filter
-                                              .call(
-                                                $event.target.options,
-                                                function(o) {
-                                                  return o.selected
-                                                }
-                                              )
-                                              .map(function(o) {
-                                                var val =
-                                                  "_value" in o
-                                                    ? o._value
-                                                    : o.value
-                                                return val
-                                              })
-                                            _vm.tipopersonalizado = $event
-                                              .target.multiple
-                                              ? $$selectedVal
-                                              : $$selectedVal[0]
-                                          },
-                                          function($event) {
-                                            return _vm.getPersonalizado(
-                                              _vm.tipopersonalizado
-                                            )
-                                          }
-                                        ]
-                                      }
+                                      staticClass: "form-group",
+                                      class: _vm.emptyPersonalizado
                                     },
                                     [
+                                      _c("label", [
+                                        _vm._v(" Periodo personalizado ")
+                                      ]),
+                                      _vm._v(" "),
                                       _c(
-                                        "option",
+                                        "select",
                                         {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.tipopersonalizado,
+                                              expression: "tipopersonalizado"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
                                           attrs: {
-                                            selected: "selected",
-                                            value: "",
-                                            disabled: "disabled"
+                                            id: "selectfrecuencia",
+                                            required: ""
+                                          },
+                                          on: {
+                                            change: [
+                                              function($event) {
+                                                var $$selectedVal = Array.prototype.filter
+                                                  .call(
+                                                    $event.target.options,
+                                                    function(o) {
+                                                      return o.selected
+                                                    }
+                                                  )
+                                                  .map(function(o) {
+                                                    var val =
+                                                      "_value" in o
+                                                        ? o._value
+                                                        : o.value
+                                                    return val
+                                                  })
+                                                _vm.tipopersonalizado = $event
+                                                  .target.multiple
+                                                  ? $$selectedVal
+                                                  : $$selectedVal[0]
+                                              },
+                                              function($event) {
+                                                return _vm.getPersonalizado(
+                                                  _vm.tipopersonalizado
+                                                )
+                                              }
+                                            ]
                                           }
                                         },
-                                        [_vm._v("SELECCIONE UNA OPCIÓN")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "DIAS" } },
-                                        [_vm._v("DÍAS")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "MESES" } },
-                                        [_vm._v("MESES")]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "option",
-                                        { attrs: { value: "AÑOS" } },
-                                        [_vm._v("AÑOS")]
+                                        [
+                                          _c(
+                                            "option",
+                                            {
+                                              attrs: {
+                                                selected: "selected",
+                                                value: "",
+                                                disabled: "disabled"
+                                              }
+                                            },
+                                            [_vm._v("SELECCIONE UNA OPCIÓN")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "option",
+                                            { attrs: { value: "D" } },
+                                            [_vm._v("DÍAS")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "option",
+                                            { attrs: { value: "M" } },
+                                            [_vm._v("MESES")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "option",
+                                            { attrs: { value: "A" } },
+                                            [_vm._v("AÑOS")]
+                                          )
+                                        ]
                                       )
                                     ]
                                   )
@@ -30466,6 +30475,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -30518,8 +30528,7 @@ __webpack_require__.r(__webpack_exports__);
       periodoRepeticion: '',
       periodo: 'D',
       agregarCantidad: 0,
-      entregas: [],
-      disabledInputAlarma: true
+      entregas: []
     };
   },
   computed: {
@@ -30586,7 +30595,18 @@ __webpack_require__.r(__webpack_exports__);
     },
     emptyPeriodoSelect: function emptyPeriodoSelect() {
       if (this.validatedata) {
-        return this.periodoSelect == '' ? ' has-error' : '';
+        console.log('empty periodo select', this.periodoSelect);
+
+        if (this.periodoSelect != "4") {
+          return this.periodoSelect == '' ? ' has-error' : '';
+        }
+      }
+
+      return '';
+    },
+    emptyPersonalizado: function emptyPersonalizado() {
+      if (this.validatedata) {
+        return this.tipopersonalizado == '' ? ' has-error' : '';
       }
 
       return '';
@@ -30633,6 +30653,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getPeriodoRepeticion: function getPeriodoRepeticion(periodoselected) {
+      console.log(this.periodoSelect);
       this.personalizado = periodoselected == 4;
 
       if (periodoselected != 'D' || periodoselected != 'Q') {
@@ -30743,11 +30764,10 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.rawDataAlarmas);
     },
     crearInforme: function crearInforme() {
-      // this.crearFechasEntregas();
       this.validatedata = true;
 
       if (Object(_utilities__WEBPACK_IMPORTED_MODULE_3__["removeBlankSpaces"])(this.nombreInforme) == '') {
-        this.getToast('info', 'Debe asignar un nombre al informe', 'fa-times'); // document.getElementById('divnombre').classList.add('has-error')
+        this.getToast('info', 'Debe asignar un nombre al informe', 'fa-times');
       } else if (this.idEnteSelect == '') {
         this.getToast('info', 'Debe seleccionar el ente al que se realiza el informe', 'fa-times');
       } else if (this.file == '') {
@@ -30756,13 +30776,18 @@ __webpack_require__.r(__webpack_exports__);
         this.getToast('info', 'Debe seleccionar la dependencia responsable', 'fa-times');
       } else if (this.dataEntrega == '') {
         this.getToast('info', 'Debe seleccionar la fecha de entrega del informe', 'fa-times');
-      } else if (this.periodoSelect == '') {
+      } else if (this.periodoSelect == '' && this.periodoSelect != '4') {
         this.getToast('info', 'Debe seleccionar el periodo de repetición de informe', 'fa-times');
+      } else if (this.personalizado) {
+        if (this.tipopersonalizado == '') {
+          this.getToast('info', 'Debe seleccionar una opcion personalizada', 'fa-times');
+        }
       } else if (this.dataAlarma == '') {
         this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times');
       } else if (this.rawDataAlarmas.length < 1) {
-        this.getToast('info', 'Debe crear mínimo una alarma para el informe ', 'fa-times');
+        this.getToast('info', 'Debe añadir mínimo una alarma para el informe ', 'fa-times');
       } else {
+        this.crearFechasEntregas();
         var formData = new FormData();
         formData.append('nombre', this.nombreInforme);
         formData.append('id_ente_control', this.idEnteSelect);
@@ -30780,7 +30805,6 @@ __webpack_require__.r(__webpack_exports__);
           }
         }).then(function (res) {
           if (!res.data.error) {
-            // this.getToast('success', `${res.data.message}`, 'fa-check')
             Swal({
               title: 'Informe creado exitosamente',
               type: 'success',
@@ -30793,8 +30817,7 @@ __webpack_require__.r(__webpack_exports__);
               type: 'error',
               showConfirmButton: false,
               timer: 3000
-            }); // console.log(res.data.errorMessage)
-            // this.getToast('error', `${res.data.message}`, 'fa-times')
+            });
           }
         });
       }
@@ -30824,8 +30847,14 @@ __webpack_require__.r(__webpack_exports__);
       this.dataAlarma = '';
       this.rawDataAlarmas = [];
       this.validatedata = false;
+      this.tipopersonalizado = '';
     },
     crearFechasEntregas: function crearFechasEntregas() {
+      if (this.personalizado) {
+        this.agregarCantidad = parseInt(this.repeticion);
+        this.periodoSelect = this.tipopersonalizado;
+      }
+
       console.log(this.dataEntrega);
       console.log(this.agregarCantidad);
       console.log(this.periodoSelect);
@@ -30857,7 +30886,7 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
 
-        console.log('anuales', this.entregas);
+        console.log('anualmente', this.entregas);
       } else {
         var _tempCurrentFecha2 = '';
 
