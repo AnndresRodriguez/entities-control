@@ -19,12 +19,10 @@ class CreateInformesTable extends Migration
 
             $table->integer('id_ente_control')->unsigned();
             $table->integer('id_dependencia')->unsigned();
-            $table->integer('id_evidencia')->unsigned();
             $table->integer('id_normativa')->unsigned();
             $table->integer('estado');
             $table->foreign('id_ente_control')->references('id')->on('entes');
             $table->foreign('id_dependencia')->references('id')->on('dependencias');
-            $table->foreign('id_evidencia')->references('id')->on('evidencias');
             $table->foreign('id_normativa')->references('id')->on('normativas');
             $table->dateTime('fecha_entrega');
             $table->dateTime('fecha_final_entregas');

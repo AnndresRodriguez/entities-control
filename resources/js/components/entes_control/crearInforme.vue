@@ -14,7 +14,6 @@
 
         <section class="content">
             <div class="row">
-                <!-- <div class="panel panel-widget" id="item_1"> -->
                 <div class="col-xs-12">
 					<!-- DIV BOX INCIO -->
 					<div class="box">
@@ -23,18 +22,6 @@
 						</div>
 
 						<div class="box-body">
-
-                            <!-- <div class="col-md-12">
-                                <label> Evidencias de informe</label>
-                                    <vue-dropzone ref="myVueDropzone" id="myVueDropzone" :options="dropzoneOptions"  :useCustomSlot=true @vdropzone-success-multiple="loadMulipleFiles">
-                                    <h3 class="dropzone-custom-title">Arrastre y suba sus evidencias de Informe aquí <i class="fa fa-upload" aria-hidden="true"></i></h3>
-                                    <div class="subtitle">...o un Click para seleccionar desde su computador</div>
-                                    </vue-dropzone>
-
-                            </div> -->
-
-
-
                             <div class="col-xs-12" id="datos-informe" style="margin-top: 10px">
 								<div class="panel panel-primary">
 									<div class="panel-heading d-flex justify-between">
@@ -130,11 +117,10 @@
                                                 <div class="form-group" :class="emptyFechaEntrega" >
                                                     <label> Seleccione la Fecha y Hora límite para la entrega del informe *</label>
                                                      <datetime
-                                                        type="datetime" input-class="form-control"
-                                                        use12-hour
+                                                        type="date" input-class="form-control"
                                                         :min-datetime="dataInitialCalendar"
                                                         :phrases="{ok: 'Seleccionar', cancel: 'Cancelar'}"
-                                                        title="Fecha y hora de entrega"
+                                                        title="Fecha de entrega"
                                                         v-model="dataEntrega">
                                                     </datetime>
                                                 </div>
@@ -174,7 +160,7 @@
                                                         <datetime
                                                         input-id="data-finalizacion"
                                                         input-class="form-control"
-                                                        :disabled="enabledDateLimit"
+                                                        :diInputAlarma"
                                                         :min-datetime="initializeMinDateLimit"
                                                         :phrases="{ok: 'Seleccionar', cancel: 'Cancelar'}"
                                                         v-model="dataFinalizacion">
@@ -224,18 +210,19 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group" :class="emptyAlarma">
-                                                    <label> Seleccione y agregue la Fecha y Hora de Alarma *</label>
+                                                    <label> Seleccione y agregue la Fecha de Alarma *</label>
                                                     <span @click="disabledBtnCreateAlarma">
                                                         <datetime
-                                                        type="datetime" input-class="form-control"
-                                                        use12-hour
+                                                        type="date"
+                                                        :disabled="enabledInputAlarma"
+                                                        input-class="form-control"
                                                         v-model="dataAlarma"
+                                                        :max-datetime="initializeMaxTimeAlarm"
                                                         title='Alarma de previo aviso'
                                                         :phrases="{ok: 'Seleccionar', cancel: 'Cancelar'}"
-
                                                         >
                                                         </datetime>
-                                                        <!-- :max-datetime="initializeMaxTimeAlarm" -->
+
                                                     </span>
                                                 </div>
                                             </div>
@@ -270,16 +257,9 @@
 
 									</div>
 									<div class="panel-footer">
-
 										<button class="btn btn-primary" id="crear-informe" @click="crearInforme">
 											<i class="fas fa-stopwatch"></i> Crear Informe
 										</button>
-										<!-- <button class="btn btn-danger" id="solicitar-retiro" @click="solicitarRetiro()" :disabled="usuario_retirado >= 1 || !permisos_asignados.length">
-											<i class="fas fa-user-slash"></i> Solicitar retiro
-										</button> -->
-										<!-- <button class="btn" id="imprimir-paz-salvo" @click="imprimirPazYSalvo()" :class="usuario_retirado ? 'btn-success' : 'btn-defualt'" :disabled="!(usuario_retirado == 2)">
-											<i class="far fa-file-pdf"></i> Imprimir paz y salvo
-										</button> -->
 									</div>
 								</div>
 							</div>
@@ -344,8 +324,6 @@
 
 <script>
 
-import vue2Dropzone from 'vue2-dropzone';
-import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 import { Datetime } from 'vue-datetime';
 import 'vue-datetime/dist/vue-datetime.css';
 import $ from 'jquery';
@@ -355,7 +333,7 @@ import URL_HUEM from './utilities';
 export default {
 
   components: {
-        vueDropzone: vue2Dropzone,
+
         datetime: Datetime
   },
 
@@ -369,7 +347,7 @@ export default {
 		data: function() {
 			return ({
                 file: '',
-                fechaEntrega: '', fechaLimite: '', dataEntrega: '', dataAlarma: '', dataEntrega: '', dataFinalizacion: '', evidencias : [], rawDataAlarmas: [], alarmas: [], horaLimite: '',
+                fechaEntrega: '', fechaLimite: '', dataEntrega: '', dataAlarma: '',  dataFinalizacion: '', evidencias : [], rawDataAlarmas: [], alarmas: [], horaLimite: '',
                 nombreInforme: '', idDependencia: '', responsableDependencia: '', emailDependencia: '',
                 nuevoEnte: '', cantidadFinalizacion: 1,
                 entesControl: [],
@@ -390,24 +368,13 @@ export default {
                 periodoRepeticion: '',
                 periodo: 'D', agregarCantidad: 0,
                 entregas: [],
-                dropzoneOptions: {
-                    url: 'https://httpbin.org/post',
-                    thumbnailWidth: 200,
-                    thumbnailHeight: 200,
-                    maxFilesize: 10,
-                    addRemoveLinks: true,
-                    dictRemoveFile: 'Borrar',
-                    uploadMultiple: true,
-                    maxFiles: 10,
-                    parallelUploads: 10
-                }
-
+                disabledInputAlarma: true
 
 			})
 		},
 		computed: {
 
-            enabledDateLimit: function(){
+            enabledInputAlarma: function(){
 
                 return this.dataEntrega == ''
 
@@ -683,12 +650,6 @@ export default {
                   else if(this.periodoSelect == ''){
                     this.getToast('info', 'Debe seleccionar el periodo de repetición de informe', 'fa-times')
                 }
-
-                //   else if(this.dataFinalizacion == ''){
-
-                //     this.getToast('info', 'Debe seleccionar hasta que fecha se entregará este informe', 'fa-times')
-
-                // }
 
                 else if(this.dataAlarma == ''){
 

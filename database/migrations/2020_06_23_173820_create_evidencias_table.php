@@ -17,8 +17,8 @@ class CreateEvidenciasTable extends Migration
             $table->increments('id');
             $table->string('nombre', 50);
             $table->string('url_evidencia', 100);
-            // $table->integer('id_informe')->unsigned();
-            // $table->foreign('id_informe')->references('id')->on('informes');
+            $table->integer('id_informe')->unsigned();
+            $table->foreign('id_informe')->references('id')->on('informes');
             $table->dateTime('fecha_creacion')->default(now());
             $table->dateTime('fecha_edicion');
 

@@ -46,10 +46,6 @@
                                     <router-link class="itemTextWrapper" to="/entes_control/crear_informe"> CREAR INFORME </router-link>
                                 </div>
                                 <div class="item">
-                                    <router-link class="icon-file_manager" to="/entes_control/cargar_evidencias/"> <img :src="iconos.gestor_permisos.validar_permisos" class="img-item-panel"> </router-link>
-                                    <router-link class="itemTextWrapper" to="/entes_control/cargar_evidencias/"> CARGAR EVIDENCIAS </router-link>
-                                </div>
-                                <div class="item">
                                     <router-link class="icon-file_manager" to="/entes_control/configuracion_general/"> <img :src="iconos.gestor_permisos.configuracion_entes_dependencias" class="img-item-panel"> </router-link>
                                     <router-link class="itemTextWrapper" to="/entes_control/configuracion_general/"> CONFIGURACIÓN GENERAL </router-link>
                                 </div>

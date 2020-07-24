@@ -170,6 +170,21 @@ class InformeController extends Controller
 
         // $informe = Informe::where('id', $request->id_informe)->get();
 
+    }
+
+    public function getInformesByDependencia(Request $request){
+
+        // $informe = Informe::where('id', $request->id_dependencia)->get();
+
+        $informes = DB::table('informes')
+                    ->join('dependencias', 'informes.id_dependencia', '=', 'dependencias.id')
+                    ->join('entes', 'informes.id_ente_control', '=', 'entes.id')
+                    ->select('informes.fecha_creacion', 'informes.nombre as nombre_informe'
+                    ,'entes.nombre as nombre_ente', 'dependencias.responsable', 'dependencias.nombre as nombre_dependencia', 'informes.estado', 'informes.fecha_entrega', 'informes.id')
+
+                    ->get();
+
+        // return response()->json([ "error" => false, "message" => 'Dependencias con el ID'.$request->id_dependencia , "dataInforme" => $informe, "errorMessage" => '' ], 200);
 
 
 

@@ -16,8 +16,6 @@ class CreateNormativasTable extends Migration
         Schema::create('normativas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('url_normativa', 100);
-            // $table->integer('id_informe')->unsigned();
-            // $table->foreign('id_informe')->references('id')->on('informes');
             $table->dateTime('fecha_creacion')->default(now());
             $table->dateTime('fecha_edicion');
         });

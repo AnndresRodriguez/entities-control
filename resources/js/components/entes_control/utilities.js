@@ -64,6 +64,7 @@ export function formatDate(date) {
 
 export function formatISO8601(date){
 
+
     let month = date.getMonth() + 1
     let day = date.getDate()
 

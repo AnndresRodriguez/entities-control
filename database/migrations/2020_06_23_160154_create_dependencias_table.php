@@ -18,8 +18,6 @@ class CreateDependenciasTable extends Migration
             $table->string('nombre', 50);
             $table->string('responsable', 50);
             $table->string('correo_responsable', 50);
-            // $table->integer('id_informe')->unsigned();
-            // $table->foreign('id_informe')->references('id')->on('informes');
             $table->dateTime('fecha_creacion')->default(now());
             $table->dateTime('fecha_edicion');
         });

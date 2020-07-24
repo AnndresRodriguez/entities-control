@@ -15,22 +15,10 @@ class CreateAlarmasTable extends Migration
     {
         Schema::create('alarmas', function (Blueprint $table) {
             $table->increments('id');
-
-            // $table->integer('id_anio')->unsigned();
-            // $table->integer('id_mes')->unsigned();
-            // $table->integer('id_dia')->unsigned();
-
-            // $table->foreign('id_anio')->references('id')->on('anios');
-            // $table->foreign('id_mes')->references('id')->on('mes');
-            // $table->foreign('id_dia')->references('id')->on('dias');
             $table->dateTime('fecha_hora_alarma');
             $table->integer('id_informe')->unsigned();
-            // $table->foreign('id_informe')->references('id')->on('informes');
-            // $table->dateTime('fecha_creacion')->default(now());
             $table->dateTime('fecha_creacion')->default(now());
             $table->dateTime('fecha_edicion');
-
-
 
         });
     }

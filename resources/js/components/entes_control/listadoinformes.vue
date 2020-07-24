@@ -43,13 +43,17 @@
                                           <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label for="nombreInforme">Filtrar por nombre</label>
-                                                <input type="text" class="form-control" id="nombreInforme" placeholder="Ingrese el nombre del informe">
+                                                <input type="text" class="form-control" id="nombreInforme" placeholder="Ingrese el nombre del informe"
+                                                v-model="searchName"
+                                                :disabled="disabledOption"
+                                                >
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="inputPassword4">Filtrar por Dependencia</label>
-                                                <select class="form-control" id="selectfrecuencia" required @change="getDependenciaSelected(dependenciaSelect)" v-model="dependenciaSelect">
+                                                <select class="form-control" id="selectfrecuencia" required @change="getDependenciaSelected(dependenciaSelect)" v-model="dependenciaSelect"
+                                                :disabled="disabledOption">
                                                         <option selected="selected" value="" disabled="disabled">ELIJA UNA OPCIÓN</option>
-                                                        <option v-for="(dependencia, index) in dependencias" :key="index" :value="index"> {{ dependencia.nombre }} </option>
+                                                        <option v-for="(dependencia, index) in dependencias" :key="index" :value="dependencia.id"> {{ dependencia.nombre }} </option>
                                                  </select>
                                             </div>
                                            </div>
@@ -68,9 +72,10 @@
                                         </div>
 
                                         <div class="col-md-12">
-                                            <template v-if="informes.length == 0">
-                                                        <div class="dflex flex-row justify-center" style="height:100% ba">
-                                                            <div class="lds-dual-ring"></div>
+                                            <template v-if="filterInformes.length == 0">
+                                                        <div class="dflex flex-row justify-center" style="height:100%">
+                                                         <label for="">No hay informes Para este año <a href="/entes_control/crear_informe"> Crear Informe</a></label>
+                                                            <!-- <div class="lds-dual-ring"></div> -->
                                                         </div>
                                             </template>
                                             <template v-else>
@@ -90,11 +95,12 @@
 
 
                                                     <tbody>
-                                                        <tr v-for="(informe, index) in informes" :key="index">
+                                                        <tr v-for="(informe, index) in filterInformes" :key="index">
 
+                                                        <td>
                                                             <span class="fontsize16">
                                                             {{ informe.fecha_creacion.split(' ')[0] }}</span>
-
+                                                        </td>
                                                         <td>
                                                             <span class="fontsize16">{{ informe.nombre_informe }}</span>
                                                         </td>
@@ -113,12 +119,16 @@
                                                         <td>
                                                             <div class="dflex justify-around">
                                                                 <span @click="setIdInforme(informe.id)">
-                                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalCargar"  >
+                                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalCargar"
+                                                                    :disabled="informe.estado != 0">
                                                                     <i class="fas fa-upload"></i>
                                                                     Cargar
                                                                 </button>
                                                                 </span>
-                                                                <span @click="getEvidencias(informe.id)">
+                                                                <span
+                                                                 @click="getEvidencias(informe.id)"
+
+                                                                 >
 
                                                                     <button type="button" class="btn btn-primary"
                                                                     data-toggle="modal"
@@ -272,11 +282,13 @@ export default {
 
     data() {
         return {
+            searchName: '',
             informes: [],
             dependencias: [],
             dependenciaSelect: '',
             evidencias: [],
             evidenciasModal: [],
+            disabledOption: true,
             dropzoneOptions: {
                     url: 'https://httpbin.org/post',
                     thumbnailWidth: 200,
@@ -291,9 +303,27 @@ export default {
             idInformeSelected: 0
         }
     },
+    computed: {
+
+        filterInformes(){
+
+            return this.informes.filter(informe => {
+                    return informe.nombre_ente.toLowerCase().includes(this.searchName.toLowerCase())
+             })
+        }
+
+    },
     methods: {
         getDependenciaSelected(dependenciaSelected){
+
             console.log(dependenciaSelected)
+            axios.post(`${URL_HUEM}/entes_control/get_informes_dependencia`, { id_dependencia: dependenciaSelected }, {  headers: {'Content-Type': 'application/json'} })
+            .then(res => {
+                console.log(res.data.dataInforme)
+                this.informes = res.data.dataInforme;
+                // console.log(this.informes);
+                // this.getAllInformes();
+            })
         },
 
         getAllDependencies(){
@@ -306,8 +336,9 @@ export default {
         getAllInformes(){
             axios.get(`${URL_HUEM}/entes_control/get_informes`)
                 .then( res => {
-                console.log(res.data.informes)
+                console.log(res.data.informes.length)
                 this.informes = res.data.informes
+                this.disabledOption = this.informes.length == 0
             })
         },
 

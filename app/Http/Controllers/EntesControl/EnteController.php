@@ -77,7 +77,7 @@ class EnteController extends Controller
         try {
 
             $id = $request->id;
-            $ente = Ente::find((int)$id);
+            $ente = Ente::find($id);
             $ente->nombre = $request->nuevoNombre;
             $ente->fecha_edicion = now();
             $ente->save();
