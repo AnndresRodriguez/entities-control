@@ -65,13 +65,18 @@ export function formatDate(date) {
 export function formatISO8601(date){
 
 
+    console.log('date-received', date.getDate());
+
     let month = date.getMonth() + 1
     let day = date.getDate()
 
     month < 10 ? month = `0${month}` : date.getMonth() + 1
     day < 10 ? day = `0${day}` : date.getDate()
 
+    console.log('formatISO', `${date.getFullYear()}-${month}-${day}`)
+
     return `${date.getFullYear()}-${month}-${day}`
+
 
 }
 

@@ -29337,7 +29337,7 @@ var render = function() {
                               [
                                 _c("label", [
                                   _vm._v(
-                                    " Seleccione la Fecha y Hora límite para la entrega del informe *"
+                                    " Seleccione la Fecha límite para la entrega del informe *"
                                   )
                                 ]),
                                 _vm._v(" "),
@@ -29345,6 +29345,7 @@ var render = function() {
                                   attrs: {
                                     type: "date",
                                     "input-class": "form-control",
+                                    "value-zone": "America/Bogota",
                                     "min-datetime": _vm.dataInitialCalendar,
                                     phrases: {
                                       ok: "Seleccionar",
@@ -29696,6 +29697,7 @@ var render = function() {
                                       attrs: {
                                         type: "date",
                                         disabled: _vm.enabledInputAlarma,
+                                        "value-zone": "America/Bogota",
                                         "input-class": "form-control",
                                         "max-datetime":
                                           _vm.initializeMaxTimeAlarm,
@@ -30476,6 +30478,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -30535,17 +30539,10 @@ __webpack_require__.r(__webpack_exports__);
     enabledInputAlarma: function enabledInputAlarma() {
       return this.dataEntrega == '';
     },
-    initializeMinDateLimit: function initializeMinDateLimit() {
-      if (this.dataEntrega != '') {
-        this.minTimeDataLimit = Object(_utilities__WEBPACK_IMPORTED_MODULE_3__["formatISO8601"])(new Date(this.dataEntrega));
-        console.log(this.minTimeDataLimit);
-        return this.minTimeDataLimit;
-      }
-    },
     initializeMaxTimeAlarm: function initializeMaxTimeAlarm() {
       if (this.dataEntrega != '') {
-        this.maxTimeAlarm = Object(_utilities__WEBPACK_IMPORTED_MODULE_3__["formatISO8601"])(new Date(this.dataEntrega));
-        console.log(this.maxTimeAlarm);
+        this.maxTimeAlarm = Object(_utilities__WEBPACK_IMPORTED_MODULE_3__["formatISO8601"])(new Date(this.dataEntrega)); // console.log(this.maxTimeAlarm)
+
         return this.maxTimeAlarm;
       }
 
@@ -30637,6 +30634,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     initizalizeCalendar: function initizalizeCalendar() {
       this.dataInitialCalendar = Object(_utilities__WEBPACK_IMPORTED_MODULE_3__["formatISO8601"])(new Date());
+      console.log('initializeCalendar', this.dataInitialCalendar);
     },
     getAllEntes: function getAllEntes() {
       var _this = this;
@@ -30966,10 +30964,12 @@ function formatDate(date) {
   return "Alarma creada para el ".concat(date.getDate(), " de ").concat(getNameMonth(date.getMonth() + 1), " de ").concat(date.getFullYear(), " a las ").concat(formatHour("".concat(date.getHours(), ":").concat(date.getMinutes())));
 }
 function formatISO8601(date) {
+  console.log('date-received', date.getDate());
   var month = date.getMonth() + 1;
   var day = date.getDate();
   month < 10 ? month = "0".concat(month) : date.getMonth() + 1;
   day < 10 ? day = "0".concat(day) : date.getDate();
+  console.log('formatISO', "".concat(date.getFullYear(), "-").concat(month, "-").concat(day));
   return "".concat(date.getFullYear(), "-").concat(month, "-").concat(day);
 }
 

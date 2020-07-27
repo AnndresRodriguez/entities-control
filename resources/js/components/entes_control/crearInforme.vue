@@ -115,9 +115,10 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group" :class="emptyFechaEntrega" >
-                                                    <label> Seleccione la Fecha y Hora límite para la entrega del informe *</label>
+                                                    <label> Seleccione la Fecha límite para la entrega del informe *</label>
                                                      <datetime
                                                         type="date" input-class="form-control"
+                                                        value-zone="America/Bogota"
                                                         :min-datetime="dataInitialCalendar"
                                                         :phrases="{ok: 'Seleccionar', cancel: 'Cancelar'}"
                                                         title="Fecha de entrega"
@@ -218,6 +219,7 @@
                                                         <datetime
                                                         type="date"
                                                         :disabled="enabledInputAlarma"
+                                                        value-zone="America/Bogota"
                                                         input-class="form-control"
                                                         v-model="dataAlarma"
                                                         :max-datetime="initializeMaxTimeAlarm"
@@ -380,24 +382,12 @@ export default {
 
             },
 
-            initializeMinDateLimit(){
-
-                if(this.dataEntrega != ''){
-
-                    this.minTimeDataLimit = formatISO8601(new Date(this.dataEntrega));
-                    console.log(this.minTimeDataLimit);
-                    return this.minTimeDataLimit;
-
-                }
-
-            },
-
             initializeMaxTimeAlarm(){
 
                 if(this.dataEntrega != ''){
 
                     this.maxTimeAlarm = formatISO8601(new Date(this.dataEntrega));
-                    console.log(this.maxTimeAlarm)
+                    // console.log(this.maxTimeAlarm)
                     return this.maxTimeAlarm
 
                 }
@@ -495,6 +485,7 @@ export default {
             initizalizeCalendar(){
 
                 this.dataInitialCalendar = formatISO8601(new Date());
+                console.log('initializeCalendar', this.dataInitialCalendar);
 
             },
 
