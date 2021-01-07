@@ -9,10 +9,7 @@ import gestor_permisos from './routes/gestor_permisos'
 import entes_control from './routes/entes_control'
 
 
-
-
 import wildcard from './routes/wildcard'
-
 
 const routes = rutasBase
                 .concat(administrar)

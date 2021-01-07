@@ -24,7 +24,7 @@ class UserController extends Controller
      * @return void
      */
     
-    public function __construc(){
+    public function __construct(){
         $this->middleware('auth');
     }
 

@@ -91,7 +91,6 @@ const app = new Vue({
     },
     mounted: function() {
         this.verificarSiExisteUnaSessionActiva();
-
         store.commit('increment');
     }
 
